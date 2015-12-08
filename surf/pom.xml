@@ -28,6 +28,11 @@
           <url>https://artifacts.alfresco.com/nexus/content/repositories/snapshots</url>
       </snapshotRepository>
    </distributionManagement>
+   
+   <scm>
+      <connection>scm:svn:https://svn.alfresco.com/repos/alfresco-open-mirror/services/surf/trunk</connection>
+      <developerConnection>scm:svn:https://svn.alfresco.com/repos/alfresco-enterprise/services/surf/trunk</developerConnection>
+   </scm>
 
    <modules>
       <!-- Surf -->
