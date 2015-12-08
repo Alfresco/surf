@@ -42,7 +42,7 @@
            <list>
                <!-- The default persister added to the default persister service. This is done to 
                     satisfy the legacy requirement of the Alresco Share which would define the
-                    same persister through the default Spring Surf object type configuration. -->
+                    same persister through the default Surf object type configuration. -->
                <ref bean="webframework.objects.persister"/>
 			   <ref bean="presets.persister" />
            </list>

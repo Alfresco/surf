@@ -2,7 +2,7 @@
 <!DOCTYPE urlrewrite PUBLIC "-//www.tuckey.org//DTD UrlRewrite 3.0//EN" "http://www.tuckey.org/res/dtds/urlrewrite3.0.dtd">
 <urlrewrite use-query-string="true">
 
-	<!-- Spring Surf -->
+	<!-- Surf -->
 	<rule>
         <from>/favicon.ico</from>
         <to>/favicon.ico</to>

@@ -11,15 +11,15 @@
       <version>6</version>
    </parent>
 
-   <groupId>org.springframework.extensions.surf</groupId>
-   <artifactId>spring-surf-parent</artifactId>
-   <name>Spring Surf Modules</name>
+   <groupId>org.alfresco.surf</groupId>
+   <artifactId>surf-parent</artifactId>
+   <name>Surf Modules</name>
    <description>Surf Web-Framework project and configuration information for Surf modules</description>
    <packaging>pom</packaging>
-   <version>5.2-SNAPSHOT</version>
+   <version>6.0-SNAPSHOT</version>
 
    <modules>
-      <!-- Spring Surf -->
+      <!-- Surf -->
       <module>spring-surf/spring-surf</module>
       <module>spring-surf/spring-surf-api</module>
 
@@ -27,14 +27,14 @@
       <module>spring-webeditor/spring-webeditor</module>
       <module>spring-webeditor-client/spring-webeditor-client-jsp</module>
 
-      <!-- Spring Surf CMIS framework -->
+      <!-- Surf CMIS framework -->
       <module>spring-cmis</module>
 
-      <!-- Spring Surf Automated Tests -->
+      <!-- Surf Automated Tests -->
       <module>spring-surf-tests/spring-surf-fvt-app</module>
       <module>spring-surf-tests/spring-surf-extensibility-app</module>
 
-      <!-- Spring Surf Maven Archetype -->
+      <!-- Surf Maven Archetype -->
       <module>spring-surf-archetype</module>
    </modules>
    
@@ -52,7 +52,7 @@
    </properties>
 
    <dependencies>
-      <!-- Common test dependencies for Spring Surf -->
+      <!-- Common test dependencies for Surf -->
       <dependency>
          <groupId>org.springframework</groupId>
          <artifactId>spring-test</artifactId>

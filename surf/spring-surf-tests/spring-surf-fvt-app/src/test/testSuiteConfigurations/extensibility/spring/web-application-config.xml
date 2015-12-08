@@ -20,7 +20,7 @@
             <value>classpath:META-INF/spring-webscripts-config-custom.xml</value>
             <value>jar:*!/META-INF/spring-webscripts-config-custom.xml</value>
             
-            <!-- Spring Surf -->
+            <!-- Surf -->
             <value>classpath:org/springframework/extensions/surf/spring-surf-config.xml</value>
             <value>classpath:org/springframework/extensions/surf/spring-surf-config-remote.xml</value>
             <value>classpath:META-INF/spring-surf-config-custom.xml</value>
@@ -66,7 +66,7 @@
            <list>
                <!-- The default persister added to the default persister service. This is done to 
                     satisfy the legacy requirement of the Alresco Share which would define the
-                    same persister through the default Spring Surf object type configuration. -->
+                    same persister through the default Surf object type configuration. -->
                <ref bean="webframework.objects.persister"/>
 			   <ref bean="presets.persister" />
            </list>

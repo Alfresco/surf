@@ -27,7 +27,7 @@
             <value>classpath:META-INF/spring-webscripts-config-custom.xml</value>
             <value>jar:*!/META-INF/spring-webscripts-config-custom.xml</value>
             
-            <!-- Spring Surf -->
+            <!-- Surf -->
             <value>classpath:org/springframework/extensions/surf/spring-surf-config.xml</value>
             <value>classpath:org/springframework/extensions/surf/spring-surf-config-remote.xml</value>
             <value>classpath:META-INF/spring-surf-config-custom.xml</value>
@@ -256,7 +256,7 @@
    <bean id="url.model.factory" class="org.springframework.extensions.webscripts.DefaultURLModelFactory"/>
    
    <bean id="webscripts.container" parent="webscripts.abstractcontainer" class="org.springframework.extensions.webscripts.LocalWebScriptRuntimeContainer">
-      <property name="name"><value>Spring Surf Container</value></property>
+      <property name="name"><value>Surf Container</value></property>
       <property name="registry" ref="webscripts.registry" />
       <property name="searchPath" ref="webframework.webscripts.searchpath" />
       <property name="templateProcessorRegistry" ref="webframework.webscripts.registry.templateprocessor" />

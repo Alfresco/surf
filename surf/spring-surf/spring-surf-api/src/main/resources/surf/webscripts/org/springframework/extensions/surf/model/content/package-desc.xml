@@ -1,10 +1,10 @@
 <package>
-    <shortname>Spring Surf Model Content</shortname>
-    <description>Spring Surf Model Content related Webscripts.</description>
+    <shortname>Surf Model Content</shortname>
+    <description>Surf Model Content related Webscripts.</description>
     <resources>
         <resource>
             <shortname>Content Association</shortname>
-            <description>Webscripts for managing Spring Surf content association.</description>
+            <description>Webscripts for managing Surf content association.</description>
             <webscripts>association.delete,association.get,association.post</webscripts>
         </resource>
     </resources>

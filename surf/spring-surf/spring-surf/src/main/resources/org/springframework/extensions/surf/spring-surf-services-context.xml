@@ -45,7 +45,7 @@
 
    <!--  The ProcessorModelHelper used to be a class that just provided a suite of static helper method that
          relied on the FrameworkUtil static methods. This has now been converted into a Spring Bean to try
-         and avoid excessive use of Bean lookup using the application context. It also means that Spring Surf
+         and avoid excessive use of Bean lookup using the application context. It also means that Surf
          becomes more extensible. -->
    <bean id="processor.model.helper" class="org.springframework.extensions.webscripts.ProcessorModelHelper">
        <property name="taglibFactory"               ref="taglib.factory"></property>
@@ -160,7 +160,7 @@
            <list>
                <!-- The default persister added to the default persister service. This is done to 
                     satisfy the legacy requirement of the Alresco Share which would define the
-                    same persister through the default Spring Surf object type configuration. -->
+                    same persister through the default Surf object type configuration. -->
                <ref bean="webframework.objects.persister"/>
            </list>
        </property>
@@ -174,18 +174,18 @@
        <property name="objectPersistenceService" ref="webframework.service.objectpersistence" />
    </bean>
 
-    <!--  This is the concrete instance of the Spring Surf default autowire service. The reason why it extends
+    <!--  This is the concrete instance of the Surf default autowire service. The reason why it extends
           an abstract bean definition is so that consuming applications can register the same bean id to override
           this definition, but still take advantage of extending the abstract definition to only override certain
           properties (otherwise it would be necessary to copy and paste the entire definition in order to change
           a single property). If custom auto wiring is required then this bean definition MUST be overridden. If
           no autowiring is required then simply do not include the <autowire> element (or its <mode> and <runtime>
-          child elements) in the applications Spring Surf configuration. -->
+          child elements) in the applications Surf configuration. -->
     <bean id="webframework.service.autowire" parent="webframework.service.autowire.abstract" />
 	
-    <!--  The Spring Surf autowire service overrides the definitions in the default "spring-surf-model-context.xml"
+    <!--  The Surf autowire service overrides the definitions in the default "spring-surf-model-context.xml"
           configuration file to construct established WebScript & FreeMarker template search paths and persistence
-          services. Autowiring is controlled through the Spring Surf configuration file by the <autowire>, <mode>
+          services. Autowiring is controlled through the Surf configuration file by the <autowire>, <mode>
           and <runtime> elements. To disable the autowire service simply remove these elements from your configuration.
           
           The following definition provides an abstract default configuration that can be overridden (if required)
