@@ -36,7 +36,7 @@ import org.apache.commons.logging.LogFactory;
  * @see <a href="http://lesscss.org/#using-less-installation">http://lesscss.org/</a>
  * 
  * @author Kevin Roast
- * @since 5.2
+ * @since 6.0
  */
 public class ExternalLessCssThemeHandler extends LessCssThemeHandler
 {
@@ -75,35 +75,48 @@ public class ExternalLessCssThemeHandler extends LessCssThemeHandler
             throw new IllegalArgumentException("External LESS 'cmd' not set correctly in bean config.");
         }
         
-        // setup our external process and retrieve streams
+        // setup our external process and retrieve streams - IO exception is handled in caller
         Process proc = Runtime.getRuntime().exec(this.cmd);
+        
+        // if we get here, retrieve the streams for processing
         BufferedWriter stdIn = new BufferedWriter(new OutputStreamWriter(proc.getOutputStream()));
         BufferedReader stdOut = new BufferedReader(new InputStreamReader(proc.getInputStream()));
         BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
         
-        // push our CSS to the standard Input of the external process
-        stdIn.append(this.getLessVariables());
-        stdIn.append(cssContents.toString());
-        stdIn.close();
-        
-        // read the output from the command
-        StringBuilder buf = new StringBuilder(1024);
-        String s;
-        while ((s = stdOut.readLine()) != null) {
-            buf.append(s);
-        }
-        
-        // read any errors from the attempted command
-        if ((s = stdError.readLine()) != null)
+        try
         {
-            // error occured, collect information and throw exception with the message
-            buf = new StringBuilder("Error during external LESS compilation for path: ").append(path).append("\r\n");
-            do {
+            // push our CSS to the standard Input of the external process
+            stdIn.append(this.getLessVariables());
+            stdIn.append(cssContents.toString());
+            stdIn.close();
+            
+            // read the output from the command
+            StringBuilder buf = new StringBuilder(1024);
+            String s;
+            while ((s = stdOut.readLine()) != null) {
                 buf.append(s);
-            } while ((s = stdOut.readLine()) != null);
-            throw new IOException(buf.toString());
+            }
+            stdOut.close();
+            
+            // read any errors from the attempted command
+            if ((s = stdError.readLine()) != null)
+            {
+                // error occured, collect information and throw exception with the message
+                buf = new StringBuilder("Error during external LESS compilation for path: ").append(path).append("\r\n");
+                do {
+                    buf.append(s);
+                } while ((s = stdError.readLine()) != null);
+                stdError.close();
+                throw new IOException(buf.toString());
+            }
+            
+            return buf.toString();
         }
-        
-        return buf.toString();
+        finally
+        {
+            stdError.close();
+            stdOut.close();
+            stdIn.close();
+        }
     }
 }
