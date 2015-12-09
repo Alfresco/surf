@@ -140,14 +140,17 @@ public class GeneratorController extends AbstractController
         {
             try
             {
-                zos.close();
+                if (zos != null)
+                {
+                    zos.close();
+                }
             }
             catch (IOException e)
             {
                 logger.error("The following error occurred attempting to close a ZipOutputStream for a generated extension module JAR file", e);
             }
         }
-       
+        
         // Extension JAR headers...
         String filename = "Extension.jar";
         response.setHeader("Content-Disposition","attachment; filename=\"" + filename + "\"");
