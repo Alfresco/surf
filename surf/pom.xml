@@ -55,8 +55,8 @@
    <properties>
       <!-- Surf projects historically use 'spring.version' property -->
       <spring.version>3.2.14.RELEASE</spring.version>
-      <dependency.alfresco-core.version>5.6</dependency.alfresco-core.version>
-      <dependency.webscripts.version>5.9</dependency.webscripts.version>
+      <dependency.alfresco-core.version>6.0-SNAPSHOT</dependency.alfresco-core.version>
+      <dependency.webscripts.version>6.0</dependency.webscripts.version>
       <dependency.freemarker.version>2.3.23</dependency.freemarker.version>
       <dependency.rhino.version>1.7R4-alfresco-patched</dependency.rhino.version>
       <dependency.yui.version>2.9.0-alfresco-20141223</dependency.yui.version>
@@ -104,22 +104,22 @@
          </exclusions>
       </dependency>
       <dependency>
-         <groupId>org.springframework.extensions.surf</groupId>
+         <groupId>org.alfresco.surf</groupId>
          <artifactId>spring-surf-core</artifactId>
          <version>${dependency.webscripts.version}</version>
       </dependency>
       <dependency>
-         <groupId>org.springframework.extensions.surf</groupId>
+         <groupId>org.alfresco.surf</groupId>
          <artifactId>spring-surf-core-configservice</artifactId>
          <version>${dependency.webscripts.version}</version>
       </dependency>
       <dependency>
-         <groupId>org.springframework.extensions.surf</groupId>
+         <groupId>org.alfresco.surf</groupId>
          <artifactId>spring-webscripts</artifactId>
          <version>${dependency.webscripts.version}</version>
       </dependency>
       <dependency>
-         <groupId>org.springframework.extensions.surf</groupId>
+         <groupId>org.alfresco.surf</groupId>
          <artifactId>spring-webscripts-api</artifactId>
          <version>${dependency.webscripts.version}</version>
       </dependency>
