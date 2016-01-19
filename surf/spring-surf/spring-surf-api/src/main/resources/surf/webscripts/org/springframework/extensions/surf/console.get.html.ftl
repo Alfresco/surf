@@ -89,9 +89,7 @@
                   <#if failures?size &gt; 0>
                   <tr><td><a href="${url.serviceContext}/index/failures">Browse failed Web Scripts</a></td></tr>
                   </#if>
-                  <tr><td><a href="${url.serviceContext}/installer">Web Script Installer</a></td></tr>
                </table>
-
             </td>
          </tr>
       </table>

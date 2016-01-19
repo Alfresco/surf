@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.extensions.surf.RequestContext;
 import org.springframework.extensions.surf.ServletUtil;
-import org.springframework.extensions.surf.WebFrameworkConstants;
 import org.springframework.extensions.surf.exception.ResourceLoaderException;
 import org.springframework.extensions.surf.resource.Resource;
 import org.springframework.extensions.surf.site.AuthenticationUtil;
@@ -348,16 +347,6 @@ public final class ScriptRenderContext extends ScriptBase
     public String getPreviewUserId()
     {
         return context.getServiceRegistry().getObjectPersistenceService().getPersistenceContext().getUserId();
-    }
-
-    public String getFrameworkTitle()
-    {
-        return WebFrameworkConstants.FRAMEWORK_TITLE;
-    }
-    
-    public String getFrameworkVersion()
-    {
-        return WebFrameworkConstants.FRAMEWORK_VERSION;
     }
     
     public ScriptResource loadResource(String resourceId)

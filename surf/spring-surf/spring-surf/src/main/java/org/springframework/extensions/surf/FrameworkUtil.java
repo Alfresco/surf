@@ -28,8 +28,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.config.ConfigService;
 import org.springframework.extensions.config.RemoteConfigElement;
-import org.springframework.extensions.config.WebFrameworkConfigElement;
 import org.springframework.extensions.config.RemoteConfigElement.EndpointDescriptor;
+import org.springframework.extensions.config.WebFrameworkConfigElement;
 import org.springframework.extensions.surf.exception.ConnectorServiceException;
 import org.springframework.extensions.surf.exception.CredentialVaultProviderException;
 import org.springframework.extensions.surf.render.RenderService;
@@ -307,26 +307,6 @@ public final class FrameworkUtil
             logger.error("Unable to remove connector sessions", ex);
         }
     }
-    
-    /**
-     * Returns the official title of this release of the Alfresco Web Framework
-     * 
-     * @return the framework title
-     */
-    public static String getFrameworkTitle()
-    {
-        return WebFrameworkConstants.FRAMEWORK_TITLE;
-    }
-    
-    /**
-     * Returns the official version of this release of the Alfresco Web Framework
-     * 
-     * @return the framework version
-     */
-    public static String getFrameworkVersion()
-    {
-        return WebFrameworkConstants.FRAMEWORK_VERSION;
-    }    
 
     /**
      * Produces a ResourceLoader for the given object id on a given endpoint

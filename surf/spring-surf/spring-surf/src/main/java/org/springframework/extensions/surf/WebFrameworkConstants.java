@@ -21,16 +21,9 @@ package org.springframework.extensions.surf;
 
 /**
  * Web Framework constants
- *
- * @author muzquiano
  */
 public class WebFrameworkConstants
 {
-    // Labels
-    public static final String FRAMEWORK_TITLE = "Spring Surf";
-    public static final String FRAMEWORK_VERSION = "1.0.0";
-    public static final String FRAMEWORK_INITIALIZATION_SUCCESS_MESSAGE = "Successfully Initialized Spring Surf";
-
     // System Pages
     public static final String SYSTEM_PAGE_GETTING_STARTED = "page-getting-started";
     public static final String SYSTEM_PAGE_UNCONFIGURED = "page-unconfigured";
