@@ -121,7 +121,7 @@ public class SecurityHeadersFilter implements Filter
                             allHeaders.put(name, header);
                         }
 
-                        // Vaule
+                        // Value
                         ConfigElement valueConfig = headerConfig.getChild("value");
                         if (valueConfig != null)
                         {
