@@ -91,13 +91,16 @@ public class AutoComponentRegionDirective extends AbstractFreeMarkerDirective
             String xml = "<" + objectTypeId + "></" + objectTypeId + ">";
             try
             {
-                Document document = XMLUtil.parse(xml);
-                ModelPersisterInfo info = new ModelPersisterInfo("tmp", "tmp", false);
-                Component component = new ComponentImpl(objectId, info, document);
                 String uri = getStringProperty(params, "uri", true);
-                component.setURI(uri);
-                component.setURL(uri);
-                renderService.renderComponent(context, RenderFocus.BODY, component, null, true);
+                if (!uri.equals("/"))	// avoid root page direct access through a component directive see SFS-579
+                {
+                    Document document = XMLUtil.parse(xml);
+                    ModelPersisterInfo info = new ModelPersisterInfo("tmp", "tmp", false);
+                    Component component = new ComponentImpl(objectId, info, document);
+                    component.setURI(uri);
+                    component.setURL(uri);
+                    renderService.renderComponent(context, RenderFocus.BODY, component, null, true);
+                }
             }
             catch (DocumentException e)
             {
