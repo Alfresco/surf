@@ -434,11 +434,8 @@
       <property name="dependencyHandler"         ref="dependency.handler" />
    </bean>
    
-   <!-- The depenendency aggregator is used to combine multiple dependency files into a single resource that is cached
-        on the server for the duration of its lifecycle. As well as aggregating files it also compresses them using
-        the YUI Compressor classes. -->
-   <bean id="dependency.aggregator" parent="dependency.aggregator.abstract" class="org.springframework.extensions.surf.DependencyAggregator"/>
-   <bean id="dependency.aggregator.abstract" abstract="true">
+   <!-- The JavaScript compression handler - used to compress JS before being cached and stored by the web-tier -->
+   <bean id="javascript.compression.handler" parent="javascript.compression.handler.abstract" class="org.springframework.extensions.surf.YUIJavaScriptCompressorHandler">
        <!--  YUI Compressor Settings -->
        <property name="charset"               value="UTF-8"/>
        <property name="linebreak"             value="-1"/>
@@ -446,12 +443,30 @@
        <property name="verbose"               value="false"/>
        <property name="preserveAllSemiColons" value="false"/>
        <property name="disableOptimizations"  value="false"/>
-       
+   </bean>
+   <bean id="javascript.compression.handler.abstract" abstract="true">
+   </bean>
+   
+   <!-- The CSS compression handler - used to compress CSS before being cached and stored by the web-tier -->
+   <bean id="css.compression.handler" parent="css.compression.handler.abstract" class="org.springframework.extensions.surf.YUICSSCompressorHandler">
+       <!--  CSS Compressor Settings -->
+       <property name="linebreak"             value="-1"/>
+   </bean>
+   <bean id="css.compression.handler.abstract" abstract="true">
+   </bean>
+   
+   <!-- The depenendency aggregator is used to combine multiple dependency files into a single resource that is cached
+        on the server for the duration of its lifecycle. As well as aggregating files it also compresses them using
+        the YUI Compressor classes. -->
+   <bean id="dependency.aggregator" parent="dependency.aggregator.abstract" class="org.springframework.extensions.surf.DependencyAggregator"/>
+   <bean id="dependency.aggregator.abstract" abstract="true">
        <!--  Bean references -->
-       <property name="scriptConfigModel"   ref="script.config.model.instance"/>
-       <property name="dependencyHandler"   ref="dependency.handler" />
-       <property name="cssImageDataHandler" ref="css.data.image.handler"/>
-       <property name="cssThemeHandler"     ref="css.theme.handler"/>
+       <property name="scriptConfigModel"             ref="script.config.model.instance"/>
+       <property name="dependencyHandler"             ref="dependency.handler"/>
+       <property name="cssImageDataHandler"           ref="css.data.image.handler"/>
+       <property name="cssThemeHandler"               ref="css.theme.handler"/>
+       <property name="javaScriptCompressionHandler"  ref="javascript.compression.handler"/>
+       <property name="cssCompressionHandler"         ref="css.compression.handler"/>
        
        <!--  There are certain paths that we *know* will not be found and that we don't
              want to generate error message for -->
@@ -465,7 +480,6 @@
        <!-- size of file set to MD5 checksum cache in entries -
             effectively this means the max number of Aikau based pages in the cache before oldest are discarded (LRU eviction strategy) -->
        <property name="cacheSize" value="256"/>
-       
    </bean>
    
    <!-- This handles all Dojo related resource processing when Dojo support is enabled -->

@@ -53,10 +53,6 @@ import org.springframework.web.context.WebApplicationContext;
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 import com.googlecode.concurrentlinkedhashmap.EvictionListener;
 import com.googlecode.concurrentlinkedhashmap.Weighers;
-import com.yahoo.platform.yui.compressor.CssCompressor;
-import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
-import com.yahoo.platform.yui.javascript.ErrorReporter;
-import com.yahoo.platform.yui.javascript.EvaluatorException;
 
 /**
  * Bean providing aggregating, compression and caching services for groups of Surf file resource dependencies.
@@ -67,13 +63,6 @@ import com.yahoo.platform.yui.javascript.EvaluatorException;
 public class DependencyAggregator implements ApplicationContextAware, CacheReporter
 {
     private static final Log logger = LogFactory.getLog(DependencyAggregator.class);
-    
-    public String charset = "UTF-8";
-    public int linebreak = -1;
-    public boolean munge = true;
-    public boolean verbose = false;
-    public boolean preserveAllSemiColons = false;
-    public boolean disableOptimizations = false;
     
     private Boolean isDebugMode = null;
     private Boolean isCollationDebugMode = null;
@@ -93,6 +82,10 @@ public class DependencyAggregator implements ApplicationContextAware, CacheRepor
         this.cacheSize = cacheSize;
     }
     
+    /**
+     * The {@link CssImageDataHandler} provides the capability to search through CSS resources and
+     * convert all URL references to be Base64 encoded data. 
+     */
     private CssImageDataHandler cssImageDataHandler;
     public void setCssImageDataHandler(CssImageDataHandler cssImageDataHandler)
     {
@@ -109,18 +102,41 @@ public class DependencyAggregator implements ApplicationContextAware, CacheRepor
         this.cssThemeHandler = cssThemeHandler;
     }
     
+    /**
+     * The {@link DependencyHandler} provides a service for locating dependency resources and
+     * generating checksums against their contents. It also provides caching of those resources.
+     */
     private DependencyHandler dependencyHandler;
+    public void setDependencyHandler(DependencyHandler dependencyHandler)
+    {
+        this.dependencyHandler = dependencyHandler;
+    }
     
     public DependencyHandler getDependencyHandler()
     {
         return dependencyHandler;
     }
-
-    public void setDependencyHandler(DependencyHandler dependencyHandler)
+    
+    /**
+     * The {@link JavaScriptCompressionHandler} provides a service that supplies an implementation
+     * of a JavaScript compression library.
+     */
+    private JavaScriptCompressionHandler javaScriptCompressionHandler;
+    public void setJavaScriptCompressionHandler(JavaScriptCompressionHandler javaScriptCompressionHandler)
     {
-        this.dependencyHandler = dependencyHandler;
+        this.javaScriptCompressionHandler = javaScriptCompressionHandler;
     }
-
+    
+    /**
+     * The {@link CSSCompressionHandler} provides a service that supplies an implementation
+     * of a CSS compression library.
+     */
+    private CSSCompressionHandler cssCompressionHandler;
+    public void setCssCompressionHandler(CSSCompressionHandler cssCompressionHandler)
+    {
+        this.cssCompressionHandler = cssCompressionHandler;
+    }
+    
     private List<String> compressionExclusions;
     
     private List<Pattern> compressionExclusionPatterns = new ArrayList<Pattern>();
@@ -1026,14 +1042,14 @@ public class DependencyAggregator implements ApplicationContextAware, CacheRepor
                             cacheCompressedCssResource(path, compressedFile);
                         }
                     }
-                    catch (EvaluatorException e)
+                    catch (IOException e)
                     {
                         // An exception occurred compressing the file. 
                         if (logger.isWarnEnabled())
                             logger.warn("The file: \"" + path + "\" could not be compressed due to the following error: ", e);
                         
                         // Generate a String of the uncompressed file...
-                        compressedFile = IOUtils.toString(in, this.charset);
+                        compressedFile = IOUtils.toString(in, "UTF-8");
                         if (type == CompressionType.JAVASCRIPT)
                         {
                             cacheCompressedJSResource(path, compressedFile);
@@ -1051,7 +1067,7 @@ public class DependencyAggregator implements ApplicationContextAware, CacheRepor
     }
 
     /**
-     * <p>Compresses the JavaScript file provided by the supplied {@link InputStream} using the YUI {@link JavaScriptCompressor}.</p>
+     * <p>Compresses the JavaScript file provided by the supplied {@link InputStream} using the {@link JavaScriptCompressionHandler}.</p>
      * 
      * @param reader Reader
      * @return A String representation of the compressed JavaScript file
@@ -1088,16 +1104,14 @@ public class DependencyAggregator implements ApplicationContextAware, CacheRepor
         } 
         else
         {
-            JavaScriptCompressor jsc = new JavaScriptCompressor(reader, new YuiCompressorErrorReporter());
-            reader.close();
-            jsc.compress(out, linebreak, munge, verbose, preserveAllSemiColons, disableOptimizations);
+            this.javaScriptCompressionHandler.compress(reader, out);
         }
         compressedFile = out.toString();
         return compressedFile;
     }
     
     /**
-     * <p>Compresses the CSS file provided by the supplied {@link InputStream} using the YUI {@link CssCompressor}.</p>
+     * <p>Compresses the CSS file provided by the supplied {@link InputStream} using the {@link CSSCompressionHandler}.</p>
      * 
      * @param in InputStream
      * @return A String representation of the compressed CSS file
@@ -1105,14 +1119,10 @@ public class DependencyAggregator implements ApplicationContextAware, CacheRepor
      */
     public String compressCSSFile(InputStream in) throws IOException
     {
-        String compressedFile = null;
         Reader reader = new InputStreamReader(in, "UTF-8");
-        CssCompressor cssc = new CssCompressor(reader);
-        reader.close();
-        in.close();
         StringWriter out = new StringWriter();
-        cssc.compress(out, linebreak);
-        compressedFile = out.toString();
+        this.cssCompressionHandler.compress(reader, out);
+        String compressedFile = out.toString();
         return compressedFile;
     }
     
@@ -1139,82 +1149,5 @@ public class DependencyAggregator implements ApplicationContextAware, CacheRepor
         }
         
         return exclude;
-    }
-    
-    
-    /* ****************************************************
-     *                                                    *
-     * SPRING BEAN SETTERS FOR CONFIGURING YUI COMPRESSOR *
-     *                                                    *
-     ******************************************************/
-    
-    public void setCharset(String charset)
-    {
-        this.charset = charset;
-    }
-
-    public void setLinebreak(int linebreak)
-    {
-        this.linebreak = linebreak;
-    }
-
-    public void setMunge(boolean munge)
-    {
-        this.munge = munge;
-    }
-
-    public void setVerbose(boolean verbose)
-    {
-        this.verbose = verbose;
-    }
-
-    public void setPreserveAllSemiColons(boolean preserveAllSemiColons)
-    {
-        this.preserveAllSemiColons = preserveAllSemiColons;
-    }
-
-    public void setDisableOptimizations(boolean disableOptimizations)
-    {
-        this.disableOptimizations = disableOptimizations;
-    }
-    
-    /* *********************************************************
-     *                                                         *
-     * PRIVATE INNER CLASS FOR HANDLING YUI COMPRESSION ERRORS *
-     *                                                         *
-     ***********************************************************/
-    
-    private static class YuiCompressorErrorReporter implements ErrorReporter
-    {
-        public void warning(String message, String sourceName, int line, String lineSource, int lineOffset)
-        {
-            if (line < 0)
-            {
-                logger.warn(message);
-            }
-            else
-            {
-                logger.warn(line + ':' + lineOffset + ':' + message);
-            }
-        }
-
-        public void error(String message, String sourceName, int line, String lineSource, int lineOffset)
-        {
-            if (line < 0)
-            {
-                logger.error(message);
-            }
-            else
-            {
-                logger.error(line + ':' + lineOffset + ':' + message);
-            }
-        }
-
-        public EvaluatorException runtimeError(String message, String sourceName, int line, String lineSource,
-                int lineOffset)
-        {
-            error(message, sourceName, line, lineSource, lineOffset);
-            return new EvaluatorException(message);
-        }
     }
 }
