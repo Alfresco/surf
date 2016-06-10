@@ -987,6 +987,8 @@ public class DependencyAggregator implements ApplicationContextAware, CacheRepor
         if (compressedFile == null || isDebugMode() == true)
         {
             // Check the compression exclusions to ensure that we really want to compress the file...
+            // NOTE: we cannot test for  "isDebugMode() == true"  here as DojoDependencyHandler with fail to correctly regex out
+            //       the dojo dependences from files containing comments and line breaks etc.
             if (excludeFileFromCompression(path))
             {
                 InputStream in = this.dependencyHandler.getResourceInputStream(path);
