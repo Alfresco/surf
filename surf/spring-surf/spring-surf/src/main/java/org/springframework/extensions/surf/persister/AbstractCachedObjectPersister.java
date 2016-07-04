@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2016 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -19,7 +19,9 @@
 
 package org.springframework.extensions.surf.persister;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -27,6 +29,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.surf.ModelObject;
 import org.springframework.extensions.surf.ModelPersistenceContext;
 import org.springframework.extensions.surf.cache.ContentCache;
+import org.springframework.extensions.surf.util.CacheReport;
+import org.springframework.extensions.surf.util.CacheReporter;
 
 /**
  * Extends the abstract implementation by offering the basics of a caching layer.
@@ -34,7 +38,7 @@ import org.springframework.extensions.surf.cache.ContentCache;
  * @author muzquiano
  * @author kevinr
  */
-public abstract class AbstractCachedObjectPersister extends AbstractObjectPersister implements CachedPersister
+public abstract class AbstractCachedObjectPersister extends AbstractObjectPersister implements CachedPersister, CacheReporter
 {
     private final static Log logger = LogFactory.getLog(AbstractCachedObjectPersister.class);
 
@@ -142,5 +146,30 @@ public abstract class AbstractCachedObjectPersister extends AbstractObjectPersis
         {
             cache.invalidate();
         }
+    }
+
+    @Override
+    public List<CacheReport> report()
+    {
+        List<CacheReport> reports = new ArrayList<CacheReport>(caches.size());
+        for (final String key : caches.keySet())
+        {
+            ContentCache<ModelObject> cache = caches.get(key);
+            if (cache instanceof CacheReporter)
+            {
+                List<CacheReport> r = ((CacheReporter)cache).report();
+                for (CacheReport report : r)
+                {
+                    reports.add(new CacheReport(key + ":" + report.getCacheName(), report.getEntryCount(), report.getValueSizeEstimate()));
+                }
+            }
+        }
+        return reports;
+    }
+
+    @Override
+    public void clearCaches()
+    {
+        invalidateCache();
     }
 }

@@ -4,12 +4,8 @@
    <@wsLib.head>Cache Report</@wsLib.head>
    <body>
       <div>
-         <table>
-            <tr>
-               <td><img src="${resourceurl('/images/logo/AlfrescoLogo32.png', true)}" alt="Alfresco" /></td>
-               <td><span class="title">Cache Report</span></td>
-            </tr>
-         </table>
+         <@wsLib.header>Cache Report</@wsLib.header>
+         <br/>
          <table>
             <tr align="left">
                <th><b>Cache Bean</b></th>
@@ -37,13 +33,13 @@
          <br/><br/>
          <#if args.autorefresh?? && args.autorefresh="true"><#assign auto=true><#else><#assign auto=false></#if>
          <script>
-            <#if auto>var timer = setTimeout(function() {window.location.href='${url.serviceContext}/caches/report?autorefresh=true';}, 1000);</#if>
+            <#if auto>var timer = setTimeout(function() {window.location.href='${url.serviceContext}/caches/report?autorefresh=true';}, 2000);</#if>
             var auto = ${auto?string};
             function toggle()
             {
                if (auto) {
                   clearTimeout(timer);
-                  auto = false;
+                  window.location.href='${url.serviceContext}/caches/report';
                }
                else {
                   window.location.href='${url.serviceContext}/caches/report?autorefresh=true';

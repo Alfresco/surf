@@ -20,7 +20,9 @@
 package org.springframework.extensions.surf.cache;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,6 +30,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.extensions.surf.ModelObject;
 import org.springframework.extensions.surf.types.AbstractModelObject;
 import org.springframework.extensions.surf.types.Component;
+import org.springframework.extensions.surf.util.CacheReport;
+import org.springframework.extensions.surf.util.CacheReporter;
 import org.springframework.extensions.webscripts.Store;
 
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
@@ -47,7 +51,7 @@ import com.googlecode.concurrentlinkedhashmap.Weighers;
  * @author kevinr
  * @author dward
  */
-public class ModelObjectCache implements ContentCache<ModelObject>
+public class ModelObjectCache implements ContentCache<ModelObject>, CacheReporter
 {
     private static final int MAX_SIZE = -1;
     
@@ -86,7 +90,6 @@ public class ModelObjectCache implements ContentCache<ModelObject>
             // responsible for discarding items from the cache when it hits capacity
             cache = new ConcurrentLinkedHashMap.Builder<String, CacheItem<ModelObject>>()
                  .maximumWeightedCapacity(maxSize)
-                 .concurrencyLevel(32)
                  .weigher(Weighers.singleton())
                  .listener(new EvictionListener<String, CacheItem<ModelObject>>() {
                         /**
@@ -108,7 +111,7 @@ public class ModelObjectCache implements ContentCache<ModelObject>
         else
         {
             // no maximum size specified - this cache uses a standard Concurrent HashMap
-            cache = new ConcurrentHashMap<String, CacheItem<ModelObject>>(1024, 0.75f, 32);
+            cache = new ConcurrentHashMap<String, CacheItem<ModelObject>>(1024, 0.75f);
         }
     }
     
@@ -121,12 +124,12 @@ public class ModelObjectCache implements ContentCache<ModelObject>
         CacheItem<ModelObject> item = this.cache.get(key);
         if (item != null)
         {
-            synchronized (item)
+            obj = item.object;
+            
+            // check for validity of the object
+            if (this.delay >= 0L)
             {
-                obj = item.object;
-                
-                // check for validity of the object
-                if (this.delay >= 0L)
+                synchronized (item)
                 {
                     // get the content item from the cache
                     long now = System.currentTimeMillis();
@@ -226,6 +229,40 @@ public class ModelObjectCache implements ContentCache<ModelObject>
     public Set<String> keys()
     {
         return this.cache.keySet();
+    }
+    
+    @Override
+    public List<CacheReport> report()
+    {
+        List<CacheReport> reports = new ArrayList<>(1);
+        
+        long size = 0;
+        for (String key : this.cache.keySet())
+        {
+            CacheItem<ModelObject> v = this.cache.get(key);
+            if (v != null)
+            {
+                size += key.length() * 2 + 128;
+                String xml = v.object.toXML();
+                // careful to avoid Sentinel reference in cache!
+                if (xml != null)
+                {
+                    size += xml.length() * 2 + 64;
+                    size += v.object.getModelProperties().size()*128 + 32;
+                    size += v.object.getCustomProperties().size()*128 + 32;
+                    size += 1024;
+                }
+            }
+        }
+        reports.add(new CacheReport("modelObjectCache:" + store.toString(), this.cache.size(), size));
+        
+        return reports;
+    }
+
+    @Override
+    public void clearCaches()
+    {
+        this.invalidate();
     }
 
 

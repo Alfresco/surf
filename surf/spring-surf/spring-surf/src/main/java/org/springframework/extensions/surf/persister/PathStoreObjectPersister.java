@@ -21,6 +21,7 @@ package org.springframework.extensions.surf.persister;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -44,6 +45,8 @@ import org.springframework.extensions.surf.cache.ModelObjectCache;
 import org.springframework.extensions.surf.cache.ModelObjectCache.ModelObjectSentinel;
 import org.springframework.extensions.surf.exception.ModelObjectPersisterException;
 import org.springframework.extensions.surf.support.ThreadLocalRequestContext;
+import org.springframework.extensions.surf.util.CacheReport;
+import org.springframework.extensions.surf.util.CacheReporter;
 import org.springframework.extensions.surf.util.Pair;
 import org.springframework.extensions.surf.util.ReflectionHelper;
 import org.springframework.extensions.surf.util.XMLUtil;
@@ -73,7 +76,7 @@ import org.springframework.extensions.surf.util.XMLUtil;
  * 
  * @author Kevin Roast
  */
-public class PathStoreObjectPersister extends AbstractStoreObjectPersister implements ClusterMessageAware
+public class PathStoreObjectPersister extends AbstractStoreObjectPersister implements ClusterMessageAware, CacheReporter
 {
     private static Log logger = LogFactory.getLog(PathStoreObjectPersister.class);
     
@@ -837,6 +840,30 @@ public class PathStoreObjectPersister extends AbstractStoreObjectPersister imple
                     PathCacheInvalidationMessage.TYPE,
                     Collections.<String, Serializable>singletonMap(PathCacheInvalidationMessage.PAYLOAD_PATHS,
                             (Serializable)Collections.<String>singletonList(path)));
+        }
+    }
+
+    @Override
+    public List<CacheReport> report()
+    {
+        this.cacheLock.writeLock().lock();
+        try
+        {
+            List<CacheReport> reports = new ArrayList<CacheReport>(caches.size()+1);
+            if (objectCache instanceof CacheReporter)
+            {
+                List<CacheReport> r = ((CacheReporter)objectCache).report();
+                for (CacheReport report : r)
+                {
+                    reports.add(new CacheReport("objectCache" + ":" + "RemoteStoreModelObjectCache", report.getEntryCount(), report.getValueSizeEstimate()));
+                }
+            }
+            reports.addAll(super.report());
+            return reports;
+        }
+        finally
+        {
+            this.cacheLock.writeLock().unlock();
         }
     }
 }
