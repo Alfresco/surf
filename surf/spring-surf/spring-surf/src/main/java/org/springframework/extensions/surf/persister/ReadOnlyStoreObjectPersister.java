@@ -38,6 +38,7 @@ import org.springframework.extensions.surf.ModelHelper;
 import org.springframework.extensions.surf.ModelObject;
 import org.springframework.extensions.surf.ModelPersistenceContext;
 import org.springframework.extensions.surf.ModelPersisterInfo;
+import org.springframework.extensions.surf.PersisterCallbackHandler;
 import org.springframework.extensions.surf.cache.ContentCache;
 import org.springframework.extensions.surf.cache.ModelObjectCache;
 import org.springframework.extensions.surf.exception.ModelObjectPersisterException;
@@ -631,13 +632,13 @@ public class ReadOnlyStoreObjectPersister extends AbstractCachedObjectPersister
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected Map<String, ModelObject> loadObjectAndDependants(ModelPersistenceContext context, Document document, String objectTypeId, String objectId, String path)
+    protected Map<String, ModelObject> loadObjectAndDependants(final ModelPersistenceContext context, Document document, String objectTypeId, String objectId, String path)
         throws ModelObjectPersisterException
     {
         Map<String, ModelObject> map = new LinkedHashMap<String, ModelObject>();
         
         // instantiate object
-        ModelObject obj = createObject(document, objectTypeId, objectId, path);
+        final ModelObject obj = createObject(document, objectTypeId, objectId, path);
         if (obj != null)
         {
             map.put(obj.getId(), obj);
@@ -716,6 +717,17 @@ public class ReadOnlyStoreObjectPersister extends AbstractCachedObjectPersister
                                 ((AdvancedComponent) component).applyConfig(componentElement);
                             }
                         }
+                        
+                        // Callback for child component cache removal
+                        // The behaviour requires that parent objects are also removed from the cache as the child bound
+                        // components cannot be recreated in the cache with the parents being restored first MNT-16495
+                        component.setPersisterCallbackHandler(new PersisterCallbackHandler() {
+                            @Override
+                            public void removedFromCache()
+                            {
+                                getCache(context, obj.getTypeId()).remove(obj.getId());
+                            }
+                        });
                         
                         map.put(component.getId(), component);
                     }

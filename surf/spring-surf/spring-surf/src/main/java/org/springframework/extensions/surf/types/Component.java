@@ -20,6 +20,7 @@
 package org.springframework.extensions.surf.types;
 
 import org.springframework.extensions.surf.ModelObject;
+import org.springframework.extensions.surf.PersisterCallbackHandler;
 import org.springframework.extensions.surf.RequestContext;
 
 /**
@@ -183,5 +184,17 @@ public interface Component extends ModelObject, Comparable<Component>, SurfBugDa
      * a component group and does not have any affect when a component is bound directly to a region.
      */
     public void setIndex(String index);
+    
+    /**
+     * Sets an optional handler for persister callback behaviours
+     * 
+     * @param handler   PersisterCallbackHandler
+     */
+    public void setPersisterCallbackHandler(PersisterCallbackHandler handler);
+    
+    /**
+     * Cache eviction event notification
+     */
+    public void onEviction();
     
 }
