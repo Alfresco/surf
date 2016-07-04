@@ -35,13 +35,13 @@ import com.google.javascript.jscomp.CheckLevel;
 import com.google.javascript.jscomp.CompilationLevel;
 import com.google.javascript.jscomp.Compiler;
 import com.google.javascript.jscomp.CompilerOptions;
-import com.google.javascript.jscomp.PropertyRenamingPolicy;
-import com.google.javascript.jscomp.VariableRenamingPolicy;
 import com.google.javascript.jscomp.CompilerOptions.LanguageMode;
 import com.google.javascript.jscomp.JSError;
 import com.google.javascript.jscomp.LightweightMessageFormatter;
 import com.google.javascript.jscomp.MessageFormatter;
+import com.google.javascript.jscomp.PropertyRenamingPolicy;
 import com.google.javascript.jscomp.SourceFile;
+import com.google.javascript.jscomp.VariableRenamingPolicy;
 
 /**
  * JavaScript Compressor using the Google Closure compiler library to perform the compression step.
@@ -51,8 +51,6 @@ import com.google.javascript.jscomp.SourceFile;
 public class ClosureJavaScriptCompressionHandler implements JavaScriptCompressionHandler
 {
     private static final Log logger = LogFactory.getLog(ClosureJavaScriptCompressionHandler.class);
-    
-    private static ClosureErrorManager errorManager = new ClosureErrorManager();
     
     private boolean whitespaceOnly = false;
     /**
@@ -66,7 +64,7 @@ public class ClosureJavaScriptCompressionHandler implements JavaScriptCompressio
     @Override
     public void compress(Reader reader, Writer writer) throws IOException
     {
-        Compiler compiler = new Compiler(errorManager);
+        Compiler compiler = new Compiler(new ClosureErrorManager());
         
         CompilerOptions options = new CompilerOptions();
         if (whitespaceOnly)
