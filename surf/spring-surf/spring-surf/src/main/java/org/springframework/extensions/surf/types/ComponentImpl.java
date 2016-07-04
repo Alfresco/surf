@@ -22,6 +22,7 @@ package org.springframework.extensions.surf.types;
 import org.dom4j.Document;
 import org.springframework.extensions.surf.ModelHelper;
 import org.springframework.extensions.surf.ModelPersisterInfo;
+import org.springframework.extensions.surf.PersisterCallbackHandler;
 import org.springframework.extensions.surf.RequestContext;
 import org.springframework.extensions.surf.render.AbstractRenderableModelObject;
 import org.springframework.extensions.surf.render.RenderUtil;
@@ -287,7 +288,6 @@ public class ComponentImpl extends AbstractRenderableModelObject implements Comp
     public void setResolvedWebScript(WebScript webScript)
     {
         this.resolvedWebScript = webScript;
-        
     }
 
     public WebScript getResolvedWebScript()
@@ -328,5 +328,27 @@ public class ComponentImpl extends AbstractRenderableModelObject implements Comp
         }
         
         return thisIndex - oIndex;
+    }
+    
+    
+    /**
+     * Handler for persister callback behaviours
+     * @since 6.6
+     */
+    private PersisterCallbackHandler handler = null;
+    
+    @Override
+    public void setPersisterCallbackHandler(PersisterCallbackHandler handler)
+    {
+        this.handler = handler;
+    }
+
+    @Override
+    public void onEviction()
+    {
+        if (this.handler != null)
+        {
+            this.handler.removedFromCache();
+        }
     }
 }

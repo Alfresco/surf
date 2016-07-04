@@ -27,9 +27,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.extensions.surf.ModelObject;
 import org.springframework.extensions.surf.types.AbstractModelObject;
+import org.springframework.extensions.surf.types.Component;
 import org.springframework.extensions.webscripts.Store;
 
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
+import com.googlecode.concurrentlinkedhashmap.EvictionListener;
 import com.googlecode.concurrentlinkedhashmap.Weighers;
 
 /**
@@ -86,6 +88,21 @@ public class ModelObjectCache implements ContentCache<ModelObject>
                  .maximumWeightedCapacity(maxSize)
                  .concurrencyLevel(32)
                  .weigher(Weighers.singleton())
+                 .listener(new EvictionListener<String, CacheItem<ModelObject>>() {
+                        /**
+                         * Listener called when a key/value pair is evicted from the cache - we use this to ensure parent of
+                         * any child model object from a definition containing sub-components is also evicted see MNT-16495
+                         */
+                        @Override
+                        public void onEviction(String key, CacheItem<ModelObject> value)
+                        {
+                            if (value.object instanceof Component)
+                            {
+                                Component c = ((Component)value.object);
+                                c.onEviction();
+                            }
+                        }
+                    })
                  .build();
         }
         else
