@@ -18,6 +18,7 @@
  */
 package org.springframework.extensions.surf.webscripts;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -43,6 +44,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  */
 public class GetCacheReport extends DeclarativeWebScript
 {
+    private static String INFO = "Since last refresh, cache entries have {0} by {1} items and the total size has {2} by {3} bytes.";
+    
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache)
     {
@@ -60,6 +63,8 @@ public class GetCacheReport extends DeclarativeWebScript
         
         // ask each bean supporting the interface to return information on its internal cache state and size
         // we then construct a model of those reports for each bean with some simple meta information on each cache
+        long totalSize = 0L;
+        long totalCount = 0L;
         Map<String, List<Map<String, Object>>> modelBeans = new LinkedHashMap<>();
         for (String bean: beans.keySet())
         {
@@ -74,13 +79,36 @@ public class GetCacheReport extends DeclarativeWebScript
             {
                 Map<String, Object> modelBeanReporterReport = new HashMap<>();
                 modelBeanReporterReport.put("name", report.getCacheName());
-                modelBeanReporterReport.put("count", report.getEntryCount());
-                modelBeanReporterReport.put("size", report.getValueSizeEstimate());
+                int entryCount = report.getEntryCount();
+                modelBeanReporterReport.put("count", entryCount);
+                totalCount += entryCount;
+                long entrySize = report.getValueSizeEstimate();
+                modelBeanReporterReport.put("size", entrySize);
+                totalSize += entrySize;
                 modelBeanReporter.add(modelBeanReporterReport);
             }
             modelBeans.put(bean, modelBeanReporter);
         }
+        model.put("totalcount", totalCount);
+        model.put("totalsize", totalSize);
         model.put("reports", modelBeans);
+        
+        // last report size and entry count may be available
+        String strLastSize = req.getParameter("ls");
+        long lastSize = strLastSize != null && strLastSize.length() != 0 ? Long.parseLong(strLastSize) : -1;
+        String strLastCount = req.getParameter("lc");
+        long lastCount = strLastCount != null && strLastCount.length() != 0 ? Long.parseLong(strLastCount) : -1;
+        if (lastSize != -1 && lastCount != -1)
+        {
+            // build info on the size differences from the last invocation of the cache report screen
+            String info = MessageFormat.format(
+                    INFO,
+                    totalCount >= lastCount ? "increased" : "decreased",
+                    Math.abs(totalCount - lastCount),
+                    totalSize >= lastSize ? "increased" : "decreased",
+                    Math.abs(totalSize - lastSize));
+            model.put("info", info);
+        }
         
         return model;
     }
