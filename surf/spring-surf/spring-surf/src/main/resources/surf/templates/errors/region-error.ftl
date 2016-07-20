@@ -1,7 +1,7 @@
-<#assign templateId = context.properties["error-templateId"]>
-<#assign regionId = context.properties["error-regionId"]>
-<#assign regionScopeId = context.properties["error-regionScopeId"]>
-<#assign regionSourceId = context.properties["error-regionSourceId"]>
+<#assign templateId = context.properties["error-templateId"]!"null">
+<#assign regionId = context.properties["error-regionId"]!"null">
+<#assign regionScopeId = context.properties["error-regionScopeId"]!"null">
+<#assign regionSourceId = context.properties["error-regionSourceId"]!"null">
 
 <div width="100%">
 
