@@ -14,7 +14,7 @@
    <name>Surf Modules</name>
    <description>Surf Web-Framework project and configuration information for Surf modules</description>
    <packaging>pom</packaging>
-   <version>6.6</version>
+   <version>6.7-SNAPSHOT</version>
    
    <distributionManagement>
       <repository>
@@ -28,8 +28,8 @@
    </distributionManagement>
    
    <scm>
-      <connection>scm:svn:https://svn.alfresco.com/repos/alfresco-open-mirror/services/surf/tags/surf-parent-6.6</connection>
-      <developerConnection>scm:svn:https://svn.alfresco.com/repos/alfresco-enterprise/services/surf/tags/surf-parent-6.6</developerConnection>
+      <connection>scm:svn:https://svn.alfresco.com/repos/alfresco-open-mirror/services/surf/trunk</connection>
+      <developerConnection>scm:svn:https://svn.alfresco.com/repos/alfresco-enterprise/services/surf/trunk</developerConnection>
    </scm>
 
    <modules>
