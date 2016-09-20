@@ -56,7 +56,7 @@
       <!-- Surf projects historically use 'spring.version' property -->
       <spring.version>3.2.14.RELEASE</spring.version>
       <dependency.alfresco-core.version>6.4</dependency.alfresco-core.version>
-      <dependency.webscripts.version>6.8</dependency.webscripts.version>
+      <dependency.webscripts.version>6.9</dependency.webscripts.version>
       <dependency.freemarker.version>2.3.23</dependency.freemarker.version>
       <dependency.rhino.version>1.7R4-alfresco-patched</dependency.rhino.version>
       <dependency.yui.version>2.9.0-alfresco-20141223</dependency.yui.version>
@@ -124,11 +124,10 @@
          <version>${dependency.webscripts.version}</version>
       </dependency>
       
-      <!-- Servlet API 2.5 -->
       <dependency>
          <groupId>javax.servlet</groupId>
-         <artifactId>servlet-api</artifactId>
-         <version>2.5</version>
+         <artifactId>javax.servlet-api</artifactId>
+         <version>3.0.1</version>
          <scope>provided</scope>
       </dependency>
    </dependencies>

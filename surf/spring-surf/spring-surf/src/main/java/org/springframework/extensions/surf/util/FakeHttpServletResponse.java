@@ -751,9 +751,9 @@ public class FakeHttpServletResponse extends HttpServletResponseWrapper
      *            the name
      * @return the header
      */
-    public Object getHeader(String name)
+    public String getHeader(String name)
     {
-        return this.headers != null ? this.headers.get(name) : null;
+        return (String) (this.headers != null ? this.headers.get(name) : null);
     }
 
     /**
