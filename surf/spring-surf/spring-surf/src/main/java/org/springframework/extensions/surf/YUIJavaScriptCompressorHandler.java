@@ -108,7 +108,7 @@ public class YUIJavaScriptCompressorHandler implements JavaScriptCompressionHand
             }
             else
             {
-                logger.warn(line + ':' + lineOffset + ':' + message);
+                logger.warn(line + ":" + lineOffset + ":" + message);
             }
         }
 
@@ -120,7 +120,7 @@ public class YUIJavaScriptCompressorHandler implements JavaScriptCompressionHand
             }
             else
             {
-                logger.error(line + ':' + lineOffset + ':' + message);
+                logger.error(line + ":" + lineOffset + ":" + message);
             }
         }
 
