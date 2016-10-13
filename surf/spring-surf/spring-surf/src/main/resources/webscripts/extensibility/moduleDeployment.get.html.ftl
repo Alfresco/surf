@@ -68,7 +68,7 @@
                  <tr>
                     <td>
                       <div class="scrollableContainer">
-                         <select name="undeployedModules" size="10">
+                         <select name="undeployedModules" size="${undeployedModules?size + deployedModules?size}">
                             <#list undeployedModules as mod>
                                <option value='${mod}' onClick="showSelectedEvaluator(this, false);"><script type="text/javascript">getModuleId(${mod});</script></option>
                             </#list>
@@ -81,7 +81,7 @@
                     </td>
                     <td>
                       <div class="scrollableContainer">
-                         <select name="deployedModules" size="10">
+                         <select name="deployedModules" size="${undeployedModules?size + deployedModules?size}">
                             <#list deployedModules as mod>
                                <option value='${mod}' onClick="showSelectedEvaluator(this, false);"><script type="text/javascript">getModuleId(${mod});</script></option>
                             </#list>
