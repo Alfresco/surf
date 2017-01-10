@@ -73,7 +73,7 @@ define(["dojo/_base/lang"],
             "${c.attributes["id"]}": "${c.value}"<#if c_has_next>,</#if>
          </#list>
       },
-      QUICKSHARE_URL: <#if config.scoped["Social"]["quickshare"]??>"${config.scoped["Social"]["quickshare"].getChildValue("url")?replace("{context}", url.context)?js_string}"<#else>""</#if>,
+      QUICKSHARE_URL: <#if config.scoped["Social"]["quickshare"].getChildValue("url")??>"${config.scoped["Social"]["quickshare"].getChildValue("url")?replace("{context}", url.context)?js_string}"<#else>""</#if>,
       JS_LOCALE: "${locale}"
    };
 });
