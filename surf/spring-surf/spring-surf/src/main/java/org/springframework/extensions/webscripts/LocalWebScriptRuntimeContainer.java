@@ -31,6 +31,8 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.config.ConfigElement;
 import org.springframework.extensions.config.HasAikauVersion;
 import org.springframework.extensions.config.WebFrameworkConfigElement;
@@ -67,6 +69,8 @@ public class LocalWebScriptRuntimeContainer extends PresentationContainer implem
      * providing that this bean is correctly configured.</p>
      */
     private ProcessorModelHelper processorModelHelper;
+
+    private static Log logger = LogFactory.getLog(LocalWebScriptRuntimeContainer.class);
 
     public void setProcessorModelHelper(ProcessorModelHelper processorModelHelper)
     {
@@ -233,15 +237,31 @@ public class LocalWebScriptRuntimeContainer extends PresentationContainer implem
                 bindRequestContext(context);
             }
 
+            ExtensibilityModel extModel = openExtensibilityModel();
+
             try
             {
                 // call through to the parent container to perform the WebScript processing
-                ExtensibilityModel extModel = openExtensibilityModel();
                 super.executeScript(scriptReq, scriptRes, auth);
-                closeExtensibilityModel(extModel, scriptRes.getWriter());
             }
             finally
             {
+                // It's only necessary to close the model if it's actually been used. Not all WebScripts will make use of the
+                // model. An example of this would be the StreamContent WebScript. It is important not to attempt to close
+                // an unused model since the WebScript executed may have already flushed the response if it has overridden
+                // the default .execute() method.
+                if (extModel.isModelStarted())
+                {
+                    try
+                    {
+                        closeExtensibilityModel(extModel, scriptRes.getWriter());
+                    }
+                    catch (final IOException e)
+                    {
+                        logger.error("An error occurred getting the Writer when closing an ExtensibilityModel", e);
+                    }
+                }
+
                 // manually handle unbinding of RequestContext from current thread
                 if (handleBinding)
                 {
