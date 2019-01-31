@@ -40,6 +40,8 @@ public class AuthenticationUtil
     
     private static final String MT_GUEST_PREFIX = AbstractUserFactory.USER_GUEST + "@"; // eg. for MT Share
     
+    //MNT-20208 (LM-190131): configuration name in JAVA_OPTS
+    private static final String HTTP_SECURED_SESSION_PROP = "http.secured.session";
     
     public static void logout(HttpServletRequest request, HttpServletResponse response)
     {
@@ -53,6 +55,12 @@ public class AuthenticationUtil
             Cookie userCookie = new Cookie(COOKIE_ALFUSER, "");
             userCookie.setPath(request.getContextPath());
             userCookie.setMaxAge(0);
+            // MNT-20208: get "http.secured.session" flag in JAVA_OPTS if available,
+            // and use it to set "secure" and "httpOnly" attributes.
+            // LM-190131: line changes on 61-64.
+            boolean securedSession = getHttpSecuredSession();
+            userCookie.setSecure(securedSession);
+            userCookie.setHttpOnly(securedSession);
             response.addCookie(userCookie);
         }
     }
@@ -95,6 +103,12 @@ public class AuthenticationUtil
             Cookie loginCookie = new Cookie(COOKIE_ALFLOGIN, Long.toString(timeInSeconds));
             loginCookie.setPath(request.getContextPath());
             loginCookie.setMaxAge(TIMEOUT);
+            // MNT-20208: get "http.secured.session" flag in JAVA_OPTS if available,
+            // and use it to set "secure" and "httpOnly" attributes.
+            // LM-190131: line changes on 109-111.
+            boolean securedSession = getHttpSecuredSession();
+            loginCookie.setSecure(securedSession);
+            loginCookie.setHttpOnly(securedSession);
             response.addCookie(loginCookie);
             
             if (isGuest(userId) == false)
@@ -103,6 +117,10 @@ public class AuthenticationUtil
                 userCookie = new Cookie(COOKIE_ALFUSER, URLEncoder.encode(userId));
                 userCookie.setPath(request.getContextPath());
                 userCookie.setMaxAge(TIMEOUT);
+                // MNT-20208: set "secure" and "httpOnly" attributes based on flag.
+                // LM-190131: line changes on 122-123.
+                userCookie.setSecure(securedSession);
+                userCookie.setHttpOnly(securedSession);
                 response.addCookie(userCookie);
             }
         }
@@ -180,5 +198,13 @@ public class AuthenticationUtil
             }
         }
         return cookie;
+    }
+    
+    /**
+     * MNT-20208 (LM-190131): Helper function to get 'http.secured.session' flag set in JAVA_OPTS.
+     */
+    private static boolean getHttpSecuredSession()
+    {
+    	return Boolean.parseBoolean(System.getProperty(HTTP_SECURED_SESSION_PROP));
     }
 }
