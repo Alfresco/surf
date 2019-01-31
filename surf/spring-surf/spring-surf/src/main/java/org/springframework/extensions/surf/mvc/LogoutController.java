@@ -22,9 +22,12 @@ package org.springframework.extensions.surf.mvc;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.owasp.esapi.ESAPI;
 import org.springframework.extensions.surf.site.AuthenticationUtil;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
+
+import org.springframework.extensions.surf.util.UserInputValidator;
 
 /**
  * Listen for call from a client to log the user out from the current session.
@@ -65,7 +68,10 @@ public class LogoutController extends AbstractController
                     redirectURL = redirectURL + delim + keys[i] + "=" + values[i];
                 }
             }
-            response.setHeader("Location", redirectURL);
+            //response.setHeader("Location", redirectURL);
+            // MNT-20202:  Add a header to the response after ensuring that there are no encoded or illegal characters in the name and name and value
+            // LM_2019-01-30
+            ESAPI.httpUtilities().addHeader(response, "Location", redirectURL);
         }
         else
         {

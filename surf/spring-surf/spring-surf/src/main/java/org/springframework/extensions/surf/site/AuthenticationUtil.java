@@ -23,6 +23,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.owasp.esapi.ESAPI;
 import org.springframework.extensions.surf.UserFactory;
 import org.springframework.extensions.surf.support.AbstractUserFactory;
 import org.springframework.extensions.surf.util.URLEncoder;
@@ -103,7 +104,10 @@ public class AuthenticationUtil
                 userCookie = new Cookie(COOKIE_ALFUSER, URLEncoder.encode(userId));
                 userCookie.setPath(request.getContextPath());
                 userCookie.setMaxAge(TIMEOUT);
-                response.addCookie(userCookie);
+                //response.addCookie(userCookie);
+                // MNT-20202: sanitize the cookies with ESAPI before adding to response 
+                // LM_2019-01-30
+                ESAPI.httpUtilities().addCookie(response, userCookie);
             }
         }
     }
