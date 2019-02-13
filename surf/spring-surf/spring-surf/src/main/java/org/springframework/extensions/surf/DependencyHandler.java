@@ -668,15 +668,18 @@ public class DependencyHandler implements ApplicationContextAware, CacheReporter
         {
             final Writer writer = new StringBuilderWriter();
             final char[] buffer = new char[1024];
-            try
+            // MNT-20206: MNT-20206 Improper Resource Shutdown or Release CWE ID 404
+            // LM-2019-02-12
+            try (final Reader reader = new BufferedReader(new InputStreamReader(in, this.charset)))
             {
-                final Reader reader = new BufferedReader(new InputStreamReader(in, this.charset));
+//                final Reader reader = new BufferedReader(new InputStreamReader(in, this.charset));
                 int n;
                 while ((n = reader.read(buffer)) != -1) 
                 {
                     writer.write(buffer, 0, n);
                 }
                 s = writer.toString();
+                             
             } 
             finally 
             {
