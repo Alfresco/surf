@@ -40,7 +40,7 @@ public class AuthenticationUtil
     
     private static final String MT_GUEST_PREFIX = AbstractUserFactory.USER_GUEST + "@"; // eg. for MT Share
     
-    //MNT-20208 (LM-190131): configuration name in JAVA_OPTS
+    // MNT-20208 (LM-190218): option name in JAVA_OPTS
     private static final String HTTP_SECURED_SESSION_PROP = "http.secured.session";
     
     public static void logout(HttpServletRequest request, HttpServletResponse response)
@@ -55,9 +55,8 @@ public class AuthenticationUtil
             Cookie userCookie = new Cookie(COOKIE_ALFUSER, "");
             userCookie.setPath(request.getContextPath());
             userCookie.setMaxAge(0);
-            // MNT-20208: get "http.secured.session" flag in JAVA_OPTS if available,
+            // MNT-20208 (LM-190131): get "http.secured.session" flag in JAVA_OPTS if available,
             // and use it to set "secure" and "httpOnly" attributes.
-            // LM-190131: line changes on 61-64.
             boolean securedSession = getHttpSecuredSession();
             userCookie.setSecure(securedSession);
             userCookie.setHttpOnly(securedSession);
@@ -96,6 +95,14 @@ public class AuthenticationUtil
         // place user id onto the session
         request.getSession().setAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID, userId);
         
+        // MNT-20208 (LM-190218): get "http.secured.session" flag in JAVA_OPTS if available,
+        // and use it to set "secure" and "httpOnly" attributes on session.
+        boolean securedSession = getHttpSecuredSession();
+        if (response != null && response.containsHeader("SET-COOKIE") && securedSession)
+        {
+            response.setHeader("SET-COOKIE", "JSESSIONID=" + request.getSession().getId() + "; Path=" + request.getContextPath() + "; HttpOnly=" + securedSession + "; Secure=" + securedSession);
+        }
+        
         // set login and last username cookies
         if (response != null && setLoginCookies)
         {
@@ -103,10 +110,7 @@ public class AuthenticationUtil
             Cookie loginCookie = new Cookie(COOKIE_ALFLOGIN, Long.toString(timeInSeconds));
             loginCookie.setPath(request.getContextPath());
             loginCookie.setMaxAge(TIMEOUT);
-            // MNT-20208: get "http.secured.session" flag in JAVA_OPTS if available,
-            // and use it to set "secure" and "httpOnly" attributes.
-            // LM-190131: line changes on 109-111.
-            boolean securedSession = getHttpSecuredSession();
+            // MNT-20208 (LM-190218): set "secure" and "httpOnly" attributes based on flag.
             loginCookie.setSecure(securedSession);
             loginCookie.setHttpOnly(securedSession);
             response.addCookie(loginCookie);
@@ -117,8 +121,7 @@ public class AuthenticationUtil
                 userCookie = new Cookie(COOKIE_ALFUSER, URLEncoder.encode(userId));
                 userCookie.setPath(request.getContextPath());
                 userCookie.setMaxAge(TIMEOUT);
-                // MNT-20208: set "secure" and "httpOnly" attributes based on flag.
-                // LM-190131: line changes on 122-123.
+                // MNT-20208 (MNT-190218): set "secure" and "httpOnly" attributes based on flag.
                 userCookie.setSecure(securedSession);
                 userCookie.setHttpOnly(securedSession);
                 response.addCookie(userCookie);
