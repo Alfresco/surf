@@ -19,28 +19,17 @@
 
 package org.springframework.extensions.surf.util;
 
+import javax.servlet.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Vector;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpSession;
+import java.util.*;
 
 /**
  * Implementation of HttpServletRequest that mimicks a servlet originated object and provides identity implementations
@@ -386,6 +375,21 @@ public class FakeHttpServletRequest extends HttpServletRequestWrapper
             {
                 return -1;
             }
+
+            @Override
+            public boolean isFinished()
+            {
+                return false;
+            }
+
+            @Override
+            public boolean isReady()
+            {
+                return false;
+            }
+
+            @Override
+            public void setReadListener(ReadListener readListener) { }
         };
     }
 

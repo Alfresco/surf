@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 
 public class ExtensibilityServletOutputStream extends ServletOutputStream
 {
@@ -63,4 +64,12 @@ public class ExtensibilityServletOutputStream extends ServletOutputStream
         this.modelWriter.close();
     }
 
+    @Override
+    public boolean isReady()
+    {
+        return false;
+    }
+
+    @Override
+    public void setWriteListener(WriteListener writeListener) { }
 }

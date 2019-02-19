@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
-   
+
    <parent>
       <groupId>org.alfresco.surf</groupId>
       <artifactId>surf-parent</artifactId>
-      <version>6.12-SNAPSHOT</version>
+      <version>6.12</version>
       <relativePath>../../pom.xml</relativePath>
    </parent>
-   
+
    <artifactId>spring-surf-extensibility-app</artifactId>
    <name>Application for Surf Extensibility Testing</name>
    <description>Surf Application For Extensibility Testing - not intended as a sample application.</description>
@@ -25,39 +26,52 @@
                   As of version 7.x the plugin was renamed to adapt to standard maven plugin naming.       
             -->
          <plugin>
-             <groupId>org.mortbay.jetty</groupId>
-             <artifactId>jetty-maven-plugin</artifactId>
-             <version>${plugin.jetty.version}</version>
-             <configuration>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <version>${plugin.jetty.version}</version>
+            <configuration>
                <scanIntervalSeconds>0</scanIntervalSeconds>
                <scanTargets>
                   <scanTarget>src/main/webapp</scanTarget>
                </scanTargets>
-             </configuration>
+               <!--<dumpOnStart>true</dumpOnStart>-->
+            </configuration>
          </plugin>
          <!--  SureFire plug-in configuration TestNG. This overrides the default SureFire settings
                to set the FVT application to test using TestNG rather than JUnit. The reason for this
                is so that we can execute the same tests for different configurations of the FVT application
                (e.g. with caching switched on/off). -->
          <plugin>
-             <groupId>org.apache.maven.plugins</groupId>
-             <artifactId>maven-surefire-plugin</artifactId>
-             <configuration>
-                 <suiteXmlFiles>
-                     <suiteXmlFile>src/test/resources/cachingEnabledSuite.xml</suiteXmlFile>
-                     <suiteXmlFile>src/test/resources/cachingDisabledSuite.xml</suiteXmlFile>
-                 </suiteXmlFiles>
-             </configuration>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+               <suiteXmlFiles>
+                  <suiteXmlFile>src/test/resources/cachingEnabledSuite.xml</suiteXmlFile>
+                  <suiteXmlFile>src/test/resources/cachingDisabledSuite.xml</suiteXmlFile>
+               </suiteXmlFiles>
+            </configuration>
          </plugin>
       </plugins>
    </build>
    <dependencies>
-   <!--  JETTY -->
+      <!--  JETTY -->
       <dependency>
-       <groupId>org.mortbay.jetty</groupId>
-       <artifactId>jetty</artifactId>
-       <version>6.1.26</version>
-       <scope>test</scope>
+         <groupId>org.eclipse.jetty</groupId>
+         <artifactId>jetty-server</artifactId>
+         <version>${dependency.jetty.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.eclipse.jetty</groupId>
+         <artifactId>jetty-webapp</artifactId>
+         <version>${dependency.jetty.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.eclipse.jetty</groupId>
+         <artifactId>jetty-annotations</artifactId>
+         <version>${dependency.jetty.version}</version>
+         <scope>test</scope>
       </dependency>
 
       <!-- TestNG (used for testing multiple configurations of FVT application -->
@@ -80,7 +94,7 @@
          <artifactId>spring-webscripts-api</artifactId>
          <version>${dependency.webscripts.version}</version>
       </dependency>
-        
+
       <!-- Java Servlet -->
       <dependency>
          <groupId>javax.servlet</groupId>
@@ -178,7 +192,7 @@
       <dependency>
          <groupId>org.springframework.webflow</groupId>
          <artifactId>spring-js</artifactId>
-         <version>2.0.7.RELEASE</version>
+         <version>2.4.8.RELEASE</version>
       </dependency>
 
       <!-- Container-provided dependencies-->
@@ -198,7 +212,7 @@
          <artifactId>spring-test</artifactId>
          <version>${spring.version}</version>
       </dependency>
-      
+
       <!-- Apache HTTP client is used for multipart POST tests. -->
       <dependency>
          <groupId>org.apache.httpcomponents</groupId>
@@ -210,6 +224,6 @@
          <artifactId>httpmime</artifactId>
          <scope>compile</scope>
       </dependency>
-      
+
    </dependencies>
 </project>

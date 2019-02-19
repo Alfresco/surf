@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   
+
    <modelVersion>4.0.0</modelVersion>
-   
+
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>alfresco-super-pom</artifactId>
@@ -14,8 +14,8 @@
    <name>Surf Modules</name>
    <description>Surf Web-Framework project and configuration information for Surf modules</description>
    <packaging>pom</packaging>
-   <version>6.12-SNAPSHOT</version>
-   
+   <version>6.12</version>
+
    <distributionManagement>
       <repository>
           <id>alfresco-internal</id>
@@ -26,7 +26,7 @@
           <url>https://artifacts.alfresco.com/nexus/content/repositories/snapshots</url>
       </snapshotRepository>
    </distributionManagement>
-   
+
    <scm>
       <connection>scm:svn:https://svn.alfresco.com/repos/alfresco-open-mirror/services/surf/trunk</connection>
       <developerConnection>scm:svn:https://svn.alfresco.com/repos/alfresco-enterprise/services/surf/trunk</developerConnection>
@@ -51,18 +51,19 @@
       <!-- Surf Maven Archetype -->
       <module>spring-surf-archetype</module>
    </modules>
-   
+
    <properties>
       <!-- Surf projects historically use 'spring.version' property -->
-      <spring.version>3.2.14.RELEASE</spring.version>
-      <dependency.alfresco-core.version>6.4</dependency.alfresco-core.version>
-      <dependency.webscripts.version>6.9</dependency.webscripts.version>
+      <spring.version>5.1.4.RELEASE</spring.version>
+      <dependency.alfresco-core.version>7.10-SNAPSHOT</dependency.alfresco-core.version>
+      <dependency.webscripts.version>6.21</dependency.webscripts.version>
       <dependency.freemarker.version>2.3.23</dependency.freemarker.version>
       <dependency.rhino.version>1.7R4-alfresco-patched</dependency.rhino.version>
       <dependency.yui.version>2.9.0-alfresco-20141223</dependency.yui.version>
       <dependency.httpcomponents.version>4.5.1</dependency.httpcomponents.version>
       <dependency.opencmis.version>0.11.0</dependency.opencmis.version>
-      <plugin.jetty.version>7.0.1.v20091125</plugin.jetty.version>
+      <dependency.jetty.version>9.4.14.v20181114</dependency.jetty.version>
+      <plugin.jetty.version>${dependency.jetty.version}</plugin.jetty.version>
    </properties>
 
    <dependencies>
@@ -73,13 +74,13 @@
          <version>${spring.version}</version>
          <scope>test</scope>
       </dependency>
-      
+
       <dependency>
          <groupId>org.freemarker</groupId>
          <artifactId>freemarker</artifactId>
          <version>${dependency.freemarker.version}</version>
       </dependency>
-      
+
       <dependency>
          <groupId>org.alfresco</groupId>
          <artifactId>alfresco-core</artifactId>
@@ -123,15 +124,15 @@
          <artifactId>spring-webscripts-api</artifactId>
          <version>${dependency.webscripts.version}</version>
       </dependency>
-      
+
       <dependency>
          <groupId>javax.servlet</groupId>
          <artifactId>javax.servlet-api</artifactId>
-         <version>3.0.1</version>
+         <version>3.1.0</version>
          <scope>provided</scope>
       </dependency>
    </dependencies>
-   
+
    <dependencyManagement>
       <dependencies>
          <dependency>
@@ -144,13 +145,13 @@
             <artifactId>httpmime</artifactId>
             <version>${dependency.httpcomponents.version}</version>
          </dependency>
-         
+
          <dependency>
             <groupId>org.apache.chemistry.opencmis</groupId>
             <artifactId>chemistry-opencmis-client-impl</artifactId>
             <version>${dependency.opencmis.version}</version>
          </dependency>
-      
+
         <dependency>
             <groupId>org.apache.myfaces.core</groupId>
             <artifactId>myfaces-api</artifactId>
@@ -206,7 +207,7 @@
             <artifactId>commons-digester</artifactId>
             <version>2.1</version>
         </dependency>
-         
+
          <dependency>
             <groupId>com.yahoo.platform.yui</groupId>
             <artifactId>yuicompressor</artifactId>
