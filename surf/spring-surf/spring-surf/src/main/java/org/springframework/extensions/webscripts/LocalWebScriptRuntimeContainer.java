@@ -236,9 +236,15 @@ public class LocalWebScriptRuntimeContainer extends PresentationContainer implem
             try
             {
                 // call through to the parent container to perform the WebScript processing
-                ExtensibilityModel extModel = openExtensibilityModel();
-                super.executeScript(scriptReq, scriptRes, auth);
-                closeExtensibilityModel(extModel, scriptRes.getWriter());
+                if (DeclarativeWebScript.class.isAssignableFrom(scriptReq.getServiceMatch().getWebScript().getClass())) {
+                    // If the web script is declarative, then make use of extensibility model
+                    ExtensibilityModel extModel = openExtensibilityModel();
+                    super.executeScript(scriptReq, scriptRes, auth);
+                    closeExtensibilityModel(extModel, scriptRes.getWriter());
+                } else {
+                    // Skip calling extensibility model methods and avoid getting IllegalStateException on abstract web scripts
+                    super.executeScript(scriptReq, scriptRes, auth);
+                }
             }
             finally
             {
