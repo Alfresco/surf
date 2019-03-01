@@ -31,6 +31,9 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.springframework.extensions.config.ConfigElement;
 import org.springframework.extensions.config.HasAikauVersion;
 import org.springframework.extensions.config.WebFrameworkConfigElement;
@@ -57,6 +60,8 @@ import org.springframework.extensions.webscripts.servlet.WebScriptServletRuntime
  */
 public class LocalWebScriptRuntimeContainer extends PresentationContainer implements HandlesExtensibility, HasAikauVersion
 {
+    private static final Log logger = LogFactory.getLog(LocalWebScriptRuntimeContainer.class);
+
     /** ThreadLocal responsible for the current RequestContext */
     private ThreadLocal<RequestContext> renderContext = new ThreadLocal<RequestContext>();
 
@@ -235,14 +240,28 @@ public class LocalWebScriptRuntimeContainer extends PresentationContainer implem
 
             try
             {
-                // call through to the parent container to perform the WebScript processing
-                if (DeclarativeWebScript.class.isAssignableFrom(scriptReq.getServiceMatch().getWebScript().getClass())) {
-                    // If the web script is declarative, then make use of extensibility model
+                WebScript webScript = scriptReq.getServiceMatch().getWebScript();
+
+                if (webScript instanceof DeclarativeWebScript)
+                {
+                    // If the web script is declarative, then make use of extensibility model:
                     ExtensibilityModel extModel = openExtensibilityModel();
+
+                    // Call through to the parent container to perform the WebScript processing:
                     super.executeScript(scriptReq, scriptRes, auth);
-                    closeExtensibilityModel(extModel, scriptRes.getWriter());
-                } else {
-                    // Skip calling extensibility model methods and avoid getting IllegalStateException on abstract web scripts
+
+                    try
+                    {
+                        closeExtensibilityModel(extModel, scriptRes.getWriter());
+                    }
+                    catch (IOException ioe)
+                    {
+                        logger.error(ioe.getMessage(), ioe);
+                    }
+                }
+                else
+                {
+                    // Skip calling extensibility model methods and avoid getting IllegalStateException on abstract web scripts:
                     super.executeScript(scriptReq, scriptRes, auth);
                 }
             }
