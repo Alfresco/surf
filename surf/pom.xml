@@ -28,8 +28,8 @@
    </distributionManagement>
 
     <scm>
-        <connection>scm:git:git@github.com:/Alfresco/surf.git</connection>
-        <developerConnection>scm:git:git@github.com:/Alfresco/surf.git</developerConnection>
+        <connection>scm:git:git@github.com/Alfresco/surf.git</connection>
+        <developerConnection>scm:git:git@github.com/Alfresco/surf.git</developerConnection>
         <url>https://github.com/Alfresco/surf</url>
         <tag>HEAD</tag>
     </scm>
