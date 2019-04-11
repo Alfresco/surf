@@ -6,7 +6,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>alfresco-super-pom</artifactId>
-      <version>10</version>
+      <version>6</version>
    </parent>
 
    <groupId>org.alfresco.surf</groupId>
@@ -58,7 +58,7 @@
       <!-- Surf projects historically use 'spring.version' property -->
       <spring.version>3.2.14.RELEASE</spring.version>
       <dependency.alfresco-core.version>6.4</dependency.alfresco-core.version>
-      <dependency.webscripts.version>7.0</dependency.webscripts.version>
+      <dependency.webscripts.version>6.9</dependency.webscripts.version>
       <dependency.freemarker.version>2.3.23</dependency.freemarker.version>
       <dependency.rhino.version>1.7R4-alfresco-patched</dependency.rhino.version>
       <dependency.yui.version>2.9.0-alfresco-20141223</dependency.yui.version>
@@ -176,7 +176,7 @@
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.4</version>
+            <version>1.3.1</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
