@@ -18,6 +18,9 @@
  */
 package org.springframework.extensions.surf;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,6 +35,8 @@ import java.util.zip.GZIPOutputStream;
  */
 public final class DependencyResource
 {
+    private static Log logger = LogFactory.getLog(DependencyResource.class);
+
     private final String mimetype;
     private final byte[] content;
     private final String charset;
@@ -102,7 +107,12 @@ public final class DependencyResource
         }
         catch (IOException e)
         {
-            return e.getMessage();
+            if (logger.isDebugEnabled())
+            {
+                logger.debug(e.getMessage(), e);
+            }
         }
+
+        return "";
     }
 }
