@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2019 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -95,6 +95,11 @@ public class LocalWebScriptResponse extends WebScriptResponseImpl
     }
 
     public void reset()
+    {
+        // not supported
+    }
+    
+    public void reset(String s)
     {
         // not supported
     }
