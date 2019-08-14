@@ -4,7 +4,7 @@
   <parent>
 	 <groupId>org.alfresco.surf</groupId>
 	 <artifactId>surf-parent</artifactId>
-	 <version>6.17-SNAPSHOT</version>
+	 <version>6.17.0-SNAPSHOT</version>
 	 <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>spring-surf-archetype</artifactId>
