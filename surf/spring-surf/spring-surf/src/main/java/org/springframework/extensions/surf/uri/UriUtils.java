@@ -281,7 +281,7 @@ public final class UriUtils
         return result;
     }
     
-    private static Pattern URI_PATTERN = Pattern.compile("^(?!\\w?(?::|\\\\))(?:(?![^:@]+:[^:@/]*@)([^:/?#.]+):)?(?://)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:/?#]*)(?::(\\d*))?)(?!.*\\\\|.*\\.)((((?!//)/(?:[^?#](?![^?#/]*\\.[^?#/.]+(?:[?#]|$)))*/?)?([^?#/]*))(?:\\?([^#]*))?(?:#(.*))?)");
+    private static Pattern URI_PATTERN = Pattern.compile("^(?!\\w?(?::|\\\\))(?:(?![^:@]+:[^:@/]*@)([^:/?#.]+):)?(?://)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:/?#]*)(?::(\\d*))?)(?!.*\\\\)((((?!//)/(?:[^?#](?![^?#/]*\\.[^?#/.]+(?:[?#]|$)))*/?)?([^?#/]*))(?:\\?([^#]*))?(?:#(.*))?)");
     private static String[] URI_PARTS =
     {
         "source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "ref"
