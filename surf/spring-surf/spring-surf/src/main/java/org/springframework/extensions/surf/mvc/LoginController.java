@@ -20,8 +20,9 @@ package org.springframework.extensions.surf.mvc;
  
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.extensions.surf.uri.UriUtils;
+
+import org.springframework.extensions.surf.util.UserInputValidator;
  
 /**
  * Responds to Login POSTs to allow the user to authenticate to the application.
@@ -45,6 +46,9 @@ public class LoginController extends AbstractLoginController
         String successPage = (String) request.getParameter(LoginController.PARAM_SUCCESS);
         if (successPage != null)
         {
+            // MNT-20202: neutralize redirect url from front end
+            // LM_2019-01-30
+            successPage = UserInputValidator.validateRedirectUrl(successPage);
             response.sendRedirect(UriUtils.relativeUri(successPage));
         }
         else
@@ -70,6 +74,9 @@ public class LoginController extends AbstractLoginController
         request.getSession().invalidate();
         if (failurePage != null)
         {
+            // MNT-20202: neutralize redirect url from front end
+            // LM_2019-01-30
+            failurePage = UserInputValidator.validateRedirectUrl(failurePage);
             response.sendRedirect(UriUtils.relativeUri(failurePage));
         }
         else
