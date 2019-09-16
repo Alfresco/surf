@@ -14,7 +14,7 @@
    <name>Surf Modules</name>
    <description>Surf Web-Framework project and configuration information for Surf modules</description>
    <packaging>pom</packaging>
-   <version>6.17.1-SNAPSHOT</version>
+   <version>6.17.1</version>
    
    <distributionManagement>
       <repository>
@@ -31,7 +31,7 @@
         <connection>scm:git:git@github.com:Alfresco/surf.git</connection>
         <developerConnection>scm:git:git@github.com:Alfresco/surf.git</developerConnection>
         <url>https://github.com/Alfresco/surf</url>
-        <tag>HEAD</tag>
+        <tag>surf-parent-6.17.1</tag>
     </scm>
 
    <modules>
