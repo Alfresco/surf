@@ -57,7 +57,7 @@
       <!-- Surf projects historically use 'spring.version' property -->
       <spring.version>5.1.8.RELEASE</spring.version>
       <dependency.alfresco-core.version>6.4</dependency.alfresco-core.version>
-      <dependency.webscripts.version>7.9</dependency.webscripts.version>
+      <dependency.webscripts.version>7.11</dependency.webscripts.version>
       <dependency.freemarker.version>2.3.28</dependency.freemarker.version>
       <dependency.rhino.version>1.7.11</dependency.rhino.version>
       <dependency.yui.version>2.9.0-alfresco-20141223</dependency.yui.version>
@@ -170,7 +170,7 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.9.2</version>
+            <version>1.9.4</version>
         </dependency>
         <dependency>
             <groupId>commons-fileupload</groupId>
