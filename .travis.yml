@@ -15,6 +15,8 @@ branches:
 
 stages:
   - test
+  
+before_install: cd surf
 
 install: travis_retry mvn install -DskipTests=true -B -V
 
@@ -22,7 +24,6 @@ jobs:
   include:
     - stage: test
       name: "Build and test"
-      before_script: cd ${TRAVIS_BUILD_DIR}/surf
       script: 
         - cd surf
         - travis_retry mvn test
