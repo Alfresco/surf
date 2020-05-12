@@ -23,7 +23,9 @@ jobs:
     - stage: test
       name: "Build and test"
       before_script: cd ${TRAVIS_BUILD_DIR}/surf
-      script: travis_retry mvn test
+      script: 
+        - cd surf
+        - travis_retry mvn test
     - name: "WhiteSource scan"
       # only on SP branches or master and if it is not a PR
       if: fork = false AND (branch = develop OR branch =~ /support\/SP\/.*/) AND type != pull_request
