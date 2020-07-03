@@ -25,7 +25,6 @@ jobs:
     - stage: test
       name: "Build and test"
       script: 
-        - cd surf
         - travis_retry mvn test
     - name: "WhiteSource scan"
       # only on SP branches or master and if it is not a PR
@@ -45,6 +44,5 @@ jobs:
         - git checkout -B "${TRAVIS_BRANCH}"
         # Add email to link commits to user
         - git config user.email "${GIT_EMAIL}"
-        - cd surf
         # Skip building of release commits
         - mvn --batch-mode -q -DscmCommentPrefix="[maven-release-plugin][skip ci] " -Dusername="${GIT_USERNAME}" -Dpassword="${GIT_PASSWORD}" -DskipTests -Darguments=-DskipTests release:clean release:prepare release:perform
