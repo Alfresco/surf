@@ -32,12 +32,13 @@ import org.springframework.extensions.surf.util.URLEncoder;
  * @author muzquiano
  * @author kevinr
  */
-public class AuthenticationUtil
-{
-    /** cookie names */
+public class AuthenticationUtil {
+    /**
+     * cookie names
+     */
     private static final String COOKIE_ALFLOGIN = "alfLogin";
     private static final String COOKIE_ALFUSER = "alfUsername3";
-    private static final int TIMEOUT = 60*60*24*7;
+    private static final int TIMEOUT = 60 * 60 * 24 * 7;
 
     private static final String MT_GUEST_PREFIX = AbstractUserFactory.USER_GUEST + "@"; // eg. for MT Share
 
@@ -45,27 +46,23 @@ public class AuthenticationUtil
     private static final String HTTP_SECURED_SESSION_PROP = "http.secured.session";
     private static final String COOKIES_SAMESITE = "cookies.sameSite";
 
-    public static void logout(HttpServletRequest request, HttpServletResponse response)
-    {
+    public static void logout(HttpServletRequest request, HttpServletResponse response) {
         // invalidate the web session - will remove all session bound objects
         // such as connector sessions, theme settings etc.
         request.getSession().invalidate();
 
         // remove cookie
-        if (response != null)
-        {
+        if (response != null) {
             String userCookie = "alfUsername3=; Path=" + request.getContextPath() + "; Max-Age=0;";
             // MNT-20208 (LM-190131): get "http.secured.session" flag in JAVA_OPTS if available,
             // and use it to set "secure" and "httpOnly" attributes.
             boolean securedSession = getHttpSecuredSession();
-            if (securedSession)
-            {
+            if (securedSession) {
                 userCookie = userCookie + " Secure; HttpOnly;";
             }
 
             String sameSite = System.getProperty(COOKIES_SAMESITE);
-            if (sameSite != null)
-            {
+            if (sameSite != null) {
                 userCookie = userCookie + " SameSite=" + sameSite + ";";
             }
 
@@ -73,29 +70,23 @@ public class AuthenticationUtil
         }
     }
 
-    public static void login(HttpServletRequest request, String userId)
-    {
+    public static void login(HttpServletRequest request, String userId) {
         login(request, null, userId, true);
     }
 
-    public static void login(HttpServletRequest request, HttpServletResponse response, String userId)
-    {
+    public static void login(HttpServletRequest request, HttpServletResponse response, String userId) {
         login(request, response, userId, true);
     }
 
-    public static void login(HttpServletRequest request, HttpServletResponse response, String userId, boolean logout)
-    {
+    public static void login(HttpServletRequest request, HttpServletResponse response, String userId, boolean logout) {
         login(request, response, userId, logout, true);
     }
 
-    public static void login(HttpServletRequest request, HttpServletResponse response, String userId, boolean logout, boolean setLoginCookies)
-    {
-        if (logout)
-        {
+    public static void login(HttpServletRequest request, HttpServletResponse response, String userId, boolean logout, boolean setLoginCookies) {
+        if (logout) {
             // check whether there is already a user logged in
             String currentUserId = (String) request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
-            if (currentUserId != null)
-            {
+            if (currentUserId != null) {
                 // log out the current user
                 logout(request, response);
             }
@@ -110,42 +101,34 @@ public class AuthenticationUtil
         String sameSite = System.getProperty(COOKIES_SAMESITE);
 
         // set login and last username cookies
-        if (response != null && response.containsHeader(HttpHeaders.SET_COOKIE) && securedSession)
-        {
+        if (response != null && response.containsHeader(HttpHeaders.SET_COOKIE) && securedSession) {
             String cookie = "JSESSIONID=" + request.getSession().getId() + "; Path=" + request.getContextPath() + "; HttpOnly; Secure;";
-            if (sameSite != null)
-            {
+            if (sameSite != null) {
                 cookie = cookie + " SameSite=" + sameSite + ";";
             }
             response.addHeader(HttpHeaders.SET_COOKIE, cookie);
         }
 
-        if (response != null && setLoginCookies)
-        {
+        if (response != null && setLoginCookies) {
             long timeInSeconds = System.currentTimeMillis() / 1000L;
             String loginCookie = COOKIE_ALFLOGIN + "=" + Long.toString(timeInSeconds) + "; Path=" + request.getContextPath() + "; Max-Age=" + TIMEOUT + ";";
-            if (securedSession)
-            {
+            if (securedSession) {
                 loginCookie = loginCookie + " Secure; HttpOnly;";
             }
 
-            if (sameSite != null)
-            {
+            if (sameSite != null) {
                 loginCookie = loginCookie + " SameSite=" + sameSite + ";";
             }
 
             response.addHeader(HttpHeaders.SET_COOKIE, loginCookie);
 
-            if (isGuest(userId) == false)
-            {
+            if (isGuest(userId) == false) {
                 String userCookie = COOKIE_ALFUSER + "=" + URLEncoder.encode(userId) + "; Path=" + request.getContextPath() + "; Max-Age=" + TIMEOUT + ";";
-                if (securedSession)
-                {
+                if (securedSession) {
                     userCookie = userCookie + " Secure; HttpOnly;";
                 }
 
-                if (sameSite != null)
-                {
+                if (sameSite != null) {
                     userCookie = userCookie + " SameSite=" + sameSite + ";";
                 }
 
@@ -154,46 +137,39 @@ public class AuthenticationUtil
         }
     }
 
-    public static void clearUserContext(HttpServletRequest request)
-    {
+    public static void clearUserContext(HttpServletRequest request) {
         request.getSession().removeAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
         request.getSession().removeAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_OBJECT);
     }
 
-    public static boolean isAuthenticated(HttpServletRequest request)
-    {
+    public static boolean isAuthenticated(HttpServletRequest request) {
         // get user id from the session
-        String userId = (String)request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
+        String userId = (String) request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
 
         // return whether is non-null and not 'guest'
         return (userId != null && !isGuest(userId));
     }
 
-    public static boolean isGuest(String userId)
-    {
+    public static boolean isGuest(String userId) {
         // return whether 'guest' (or 'guest@tenant')
         return (userId != null && (UserFactory.USER_GUEST.equals(userId) || userId.startsWith(MT_GUEST_PREFIX)));
     }
 
-    public static boolean isExternalAuthentication(HttpServletRequest request)
-    {
+    public static boolean isExternalAuthentication(HttpServletRequest request) {
         return (request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_EXTERNAL_AUTH) != null);
     }
 
-    public static String getUserId(HttpServletRequest request)
-    {
-        return (String)request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
+    public static String getUserId(HttpServletRequest request) {
+        return (String) request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
     }
 
     /**
      * Helper to return cookie that saves the last login time for the current user.
      *
      * @param request HttpServletRequest
-     *
      * @return Cookie if found or null if not present
      */
-    public static Cookie getLastLoginCookie(HttpServletRequest request)
-    {
+    public static Cookie getLastLoginCookie(HttpServletRequest request) {
         return getCookie(request, COOKIE_ALFLOGIN);
     }
 
@@ -201,24 +177,18 @@ public class AuthenticationUtil
      * Helper to return cookie that saves the last login time for the current user.
      *
      * @param request HttpServletRequest
-     *
      * @return Cookie if found or null if not present
      */
-    public static Cookie getUsernameCookie(HttpServletRequest request)
-    {
+    public static Cookie getUsernameCookie(HttpServletRequest request) {
         return getCookie(request, COOKIE_ALFUSER);
     }
 
-    private static Cookie getCookie(HttpServletRequest request, String name)
-    {
+    private static Cookie getCookie(HttpServletRequest request, String name) {
         Cookie cookie = null;
         Cookie[] cookies = request.getCookies();
-        if (cookies != null)
-        {
-            for (int i=0; i<cookies.length; i++)
-            {
-                if (name.equals(cookies[i].getName()))
-                {
+        if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                if (name.equals(cookies[i].getName())) {
                     // found cookie
                     cookie = cookies[i];
                     break;
@@ -231,8 +201,7 @@ public class AuthenticationUtil
     /**
      * MNT-20208 (LM-190131): Helper function to get 'http.secured.session' flag set in JAVA_OPTS.
      */
-    private static boolean getHttpSecuredSession()
-    {
-    	return Boolean.parseBoolean(System.getProperty(HTTP_SECURED_SESSION_PROP));
+    private static boolean getHttpSecuredSession() {
+        return Boolean.parseBoolean(System.getProperty(HTTP_SECURED_SESSION_PROP));
     }
 }
