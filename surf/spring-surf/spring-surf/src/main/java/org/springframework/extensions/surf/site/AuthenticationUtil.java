@@ -34,9 +34,7 @@ import org.springframework.extensions.surf.util.URLEncoder;
  */
 public class AuthenticationUtil
 {
-    /**
-     * cookie names
-     */
+    /** cookie names */
     private static final String COOKIE_ALFLOGIN = "alfLogin";
     private static final String COOKIE_ALFUSER = "alfUsername3";
     private static final int TIMEOUT = 60 * 60 * 24 * 7;
@@ -167,7 +165,7 @@ public class AuthenticationUtil
     public static boolean isAuthenticated(HttpServletRequest request)
     {
         // get user id from the session
-        String userId = (String) request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
+        String userId = (String)request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
         
         // return whether is non-null and not 'guest'
         return (userId != null && !isGuest(userId));
@@ -186,24 +184,26 @@ public class AuthenticationUtil
     
     public static String getUserId(HttpServletRequest request)
     {
-        return (String) request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
+        return (String)request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
     }
     
     /**
      * Helper to return cookie that saves the last login time for the current user.
      *
      * @param request HttpServletRequest
+     *
      * @return Cookie if found or null if not present
      */
     public static Cookie getLastLoginCookie(HttpServletRequest request)
     {
         return getCookie(request, COOKIE_ALFLOGIN);
     }
-    
+
     /**
      * Helper to return cookie that saves the last login time for the current user.
      *
      * @param request HttpServletRequest
+     *
      * @return Cookie if found or null if not present
      */
     public static Cookie getUsernameCookie(HttpServletRequest request)
@@ -217,7 +217,7 @@ public class AuthenticationUtil
         Cookie[] cookies = request.getCookies();
         if (cookies != null)
         {
-            for (int i = 0; i < cookies.length; i++)
+            for (int i=0; i<cookies.length; i++)
             {
                 if (name.equals(cookies[i].getName()))
                 {
@@ -235,6 +235,6 @@ public class AuthenticationUtil
      */
     private static boolean getHttpSecuredSession()
     {
-        return Boolean.parseBoolean(System.getProperty(HTTP_SECURED_SESSION_PROP));
+    	return Boolean.parseBoolean(System.getProperty(HTTP_SECURED_SESSION_PROP));
     }
 }
