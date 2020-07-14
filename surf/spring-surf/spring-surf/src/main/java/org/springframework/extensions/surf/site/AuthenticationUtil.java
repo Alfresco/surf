@@ -41,7 +41,8 @@ public class AuthenticationUtil
         private static final String COOKIE_ALFUSER = "alfUsername3";
         private static final int TIMEOUT = 60 * 60 * 24 * 7;
 
-        private static final String MT_GUEST_PREFIX = AbstractUserFactory.USER_GUEST + "@"; // eg. for MT Share
+        private static final String MT_GUEST_PREFIX =
+                AbstractUserFactory.USER_GUEST + "@"; // eg. for MT Share
 
         // MNT-20208 (LM-190218): option name in JAVA_OPTS
         private static final String HTTP_SECURED_SESSION_PROP = "http.secured.session";
@@ -56,7 +57,8 @@ public class AuthenticationUtil
                 // remove cookie
                 if (response != null)
                 {
-                        String userCookie = "alfUsername3=; Path=" + request.getContextPath() + "; Max-Age=0;";
+                        String userCookie =
+                                "alfUsername3=; Path=" + request.getContextPath() + "; Max-Age=0;";
                         // MNT-20208 (LM-190131): get "http.secured.session" flag in JAVA_OPTS if available,
                         // and use it to set "secure" and "httpOnly" attributes.
                         boolean securedSession = getHttpSecuredSession();
@@ -80,18 +82,20 @@ public class AuthenticationUtil
                 login(request, null, userId, true);
         }
 
-        public static void login(HttpServletRequest request, HttpServletResponse response, String userId)
+        public static void login(HttpServletRequest request, HttpServletResponse response,
+                String userId)
         {
                 login(request, response, userId, true);
         }
 
-        public static void login(HttpServletRequest request, HttpServletResponse response, String userId, boolean logout)
+        public static void login(HttpServletRequest request, HttpServletResponse response,
+                String userId, boolean logout)
         {
                 login(request, response, userId, logout, true);
         }
 
-        public static void login(HttpServletRequest request, HttpServletResponse response, String userId, boolean logout,
-                boolean setLoginCookies)
+        public static void login(HttpServletRequest request, HttpServletResponse response,
+                String userId, boolean logout, boolean setLoginCookies)
         {
                 if (logout)
                 {
@@ -106,7 +110,8 @@ public class AuthenticationUtil
                 }
 
                 // place user id onto the session
-                request.getSession().setAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID, userId);
+                request.getSession()
+                        .setAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID, userId);
 
                 // MNT-20208 (LM-190218): get "http.secured.session" flag in JAVA_OPTS if available,
                 // and use it to set "secure" and "httpOnly" attributes on session.
@@ -114,10 +119,12 @@ public class AuthenticationUtil
                 String sameSite = System.getProperty(COOKIES_SAMESITE);
 
                 // set login and last username cookies
-                if (response != null && response.containsHeader(HttpHeaders.SET_COOKIE) && securedSession)
+                if (response != null && response.containsHeader(HttpHeaders.SET_COOKIE)
+                        && securedSession)
                 {
-                        String cookie = "JSESSIONID=" + request.getSession().getId() + "; Path=" + request.getContextPath()
-                                + "; HttpOnly; Secure;";
+                        String cookie =
+                                "JSESSIONID=" + request.getSession().getId() + "; Path=" + request
+                                        .getContextPath() + "; HttpOnly; Secure;";
                         if (sameSite != null)
                         {
                                 cookie = cookie + " SameSite=" + sameSite + ";";
@@ -129,8 +136,8 @@ public class AuthenticationUtil
                 {
                         long timeInSeconds = System.currentTimeMillis() / 1000L;
                         String loginCookie =
-                                COOKIE_ALFLOGIN + "=" + Long.toString(timeInSeconds) + "; Path=" + request.getContextPath()
-                                        + "; Max-Age=" + TIMEOUT + ";";
+                                COOKIE_ALFLOGIN + "=" + Long.toString(timeInSeconds) + "; Path="
+                                        + request.getContextPath() + "; Max-Age=" + TIMEOUT + ";";
                         if (securedSession)
                         {
                                 loginCookie = loginCookie + " Secure; HttpOnly;";
@@ -146,8 +153,9 @@ public class AuthenticationUtil
                         if (isGuest(userId) == false)
                         {
                                 String userCookie =
-                                        COOKIE_ALFUSER + "=" + URLEncoder.encode(userId) + "; Path=" + request.getContextPath()
-                                                + "; Max-Age=" + TIMEOUT + ";";
+                                        COOKIE_ALFUSER + "=" + URLEncoder.encode(userId) + "; Path="
+                                                + request.getContextPath() + "; Max-Age=" + TIMEOUT
+                                                + ";";
                                 if (securedSession)
                                 {
                                         userCookie = userCookie + " Secure; HttpOnly;";
@@ -172,7 +180,8 @@ public class AuthenticationUtil
         public static boolean isAuthenticated(HttpServletRequest request)
         {
                 // get user id from the session
-                String userId = (String) request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
+                String userId = (String) request.getSession()
+                        .getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
 
                 // return whether is non-null and not 'guest'
                 return (userId != null && !isGuest(userId));
@@ -181,17 +190,20 @@ public class AuthenticationUtil
         public static boolean isGuest(String userId)
         {
                 // return whether 'guest' (or 'guest@tenant')
-                return (userId != null && (UserFactory.USER_GUEST.equals(userId) || userId.startsWith(MT_GUEST_PREFIX)));
+                return (userId != null && (UserFactory.USER_GUEST.equals(userId) || userId
+                        .startsWith(MT_GUEST_PREFIX)));
         }
 
         public static boolean isExternalAuthentication(HttpServletRequest request)
         {
-                return (request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_EXTERNAL_AUTH) != null);
+                return (request.getSession()
+                        .getAttribute(UserFactory.SESSION_ATTRIBUTE_EXTERNAL_AUTH) != null);
         }
 
         public static String getUserId(HttpServletRequest request)
         {
-                return (String) request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
+                return (String) request.getSession()
+                        .getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
         }
 
         /**
