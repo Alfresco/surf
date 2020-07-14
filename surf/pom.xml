@@ -6,7 +6,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>alfresco-super-pom</artifactId>
-      <version>6</version>
+      <version>10</version>
    </parent>
 
    <groupId>org.alfresco.surf</groupId>
@@ -14,7 +14,7 @@
    <name>Surf Modules</name>
    <description>Surf Web-Framework project and configuration information for Surf modules</description>
    <packaging>pom</packaging>
-   <version>6.12-SNAPSHOT</version>
+   <version>7.9-SNAPSHOT</version>
    
    <distributionManagement>
       <repository>
@@ -26,11 +26,13 @@
           <url>https://artifacts.alfresco.com/nexus/content/repositories/snapshots</url>
       </snapshotRepository>
    </distributionManagement>
-   
-   <scm>
-      <connection>scm:svn:https://svn.alfresco.com/repos/alfresco-open-mirror/services/surf/trunk</connection>
-      <developerConnection>scm:svn:https://svn.alfresco.com/repos/alfresco-enterprise/services/surf/trunk</developerConnection>
-   </scm>
+
+    <scm>
+        <connection>scm:git:git@github.com:Alfresco/surf.git</connection>
+        <developerConnection>scm:git:git@github.com:Alfresco/surf.git</developerConnection>
+        <url>https://github.com/Alfresco/surf</url>
+        <tag>HEAD</tag>
+    </scm>
 
    <modules>
       <!-- Surf -->
@@ -45,7 +47,6 @@
       <module>spring-cmis</module>
 
       <!-- Surf Automated Tests -->
-      <module>spring-surf-tests/spring-surf-fvt-app</module>
       <module>spring-surf-tests/spring-surf-extensibility-app</module>
 
       <!-- Surf Maven Archetype -->
@@ -54,15 +55,15 @@
    
    <properties>
       <!-- Surf projects historically use 'spring.version' property -->
-      <spring.version>3.2.14.RELEASE</spring.version>
-      <dependency.alfresco-core.version>6.4</dependency.alfresco-core.version>
-      <dependency.webscripts.version>6.9</dependency.webscripts.version>
-      <dependency.freemarker.version>2.3.23</dependency.freemarker.version>
-      <dependency.rhino.version>1.7R4-alfresco-patched</dependency.rhino.version>
+      <spring.version>5.1.15.RELEASE</spring.version>
+      <dependency.alfresco-core.version>7.33</dependency.alfresco-core.version>
+      <dependency.webscripts.version>7.16</dependency.webscripts.version>
+      <dependency.freemarker.version>2.3.28</dependency.freemarker.version>
+      <dependency.rhino.version>1.7.11</dependency.rhino.version>
       <dependency.yui.version>2.9.0-alfresco-20141223</dependency.yui.version>
-      <dependency.httpcomponents.version>4.5.1</dependency.httpcomponents.version>
+      <dependency.httpcomponents.version>4.5.9</dependency.httpcomponents.version>
       <dependency.opencmis.version>0.11.0</dependency.opencmis.version>
-      <plugin.jetty.version>7.0.1.v20091125</plugin.jetty.version>
+      <plugin.jetty.version>8.1.16.v20140903</plugin.jetty.version>
    </properties>
 
    <dependencies>
@@ -169,12 +170,12 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.9.2</version>
+            <version>1.9.4</version>
         </dependency>
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.3.1</version>
+            <version>1.3.3</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

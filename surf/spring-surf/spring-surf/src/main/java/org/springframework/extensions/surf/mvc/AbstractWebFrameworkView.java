@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2015 Alfresco Software Limited.
+ * Copyright (C) 2005-2019 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -300,7 +300,6 @@ public abstract class AbstractWebFrameworkView extends AbstractUrlBasedView
         // Expose the model object as request attributes.
         // Expose forward request attributes
         exposeModelAsRequestAttributes(model, request);
-        exposeForwardRequestAttributes(request);
         
         // default character encoding
         String encoding = request.getCharacterEncoding();
@@ -348,16 +347,6 @@ public abstract class AbstractWebFrameworkView extends AbstractUrlBasedView
      */
     protected abstract void renderView(RequestContext context)
         throws Exception;
-
-    /**
-     * Expose forward request attributes.
-     *
-     * @param request the request
-     */
-    protected void exposeForwardRequestAttributes(HttpServletRequest request)
-    {
-        WebUtils.exposeForwardRequestAttributes(request);
-    }
 
     /**
      * Implementation classes should extend this method to provide for any initial setup

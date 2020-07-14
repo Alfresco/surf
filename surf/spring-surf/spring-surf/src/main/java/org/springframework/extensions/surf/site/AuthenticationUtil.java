@@ -40,6 +40,8 @@ public class AuthenticationUtil
     private static final int TIMEOUT = 60*60*24*7;
 
     private static final String MT_GUEST_PREFIX = AbstractUserFactory.USER_GUEST + "@"; // eg. for MT Share
+
+    // MNT-20208 (LM-190218): option name in JAVA_OPTS
     private static final String HTTP_SECURED_SESSION_PROP = "http.secured.session";
     private static final String COOKIES_SAMESITE = "cookies.sameSite";
 
@@ -52,8 +54,10 @@ public class AuthenticationUtil
         // remove cookie
         if (response != null)
         {
-            boolean securedSession = getHttpSecuredSession();
             String userCookie = "alfUsername3=; Path=" + request.getContextPath() + "; Max-Age=0;";
+            // MNT-20208 (LM-190131): get "http.secured.session" flag in JAVA_OPTS if available,
+            // and use it to set "secure" and "httpOnly" attributes.
+            boolean securedSession = getHttpSecuredSession();
             if (securedSession)
             {
                 userCookie = userCookie + " Secure; HttpOnly;";
@@ -100,23 +104,26 @@ public class AuthenticationUtil
         // place user id onto the session
         request.getSession().setAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID, userId);
 
-        // set login and last username cookies
+        // MNT-20208 (LM-190218): get "http.secured.session" flag in JAVA_OPTS if available,
+        // and use it to set "secure" and "httpOnly" attributes on session.
         boolean securedSession = getHttpSecuredSession();
         String sameSite = System.getProperty(COOKIES_SAMESITE);
 
-        if (response != null && response.containsHeader(HttpHeaders.SET_COOKIE) && securedSession) {
+        // set login and last username cookies
+        if (response != null && response.containsHeader(HttpHeaders.SET_COOKIE) && securedSession)
+        {
             String cookie = "JSESSIONID=" + request.getSession().getId() + "; Path=" + request.getContextPath() + "; HttpOnly; Secure;";
-            if (sameSite != null) {
+            if (sameSite != null)
+            {
                 cookie = cookie + " SameSite=" + sameSite + ";";
             }
-
             response.addHeader(HttpHeaders.SET_COOKIE, cookie);
         }
 
         if (response != null && setLoginCookies)
         {
             long timeInSeconds = System.currentTimeMillis() / 1000L;
-            String loginCookie = "alfLogin=" + timeInSeconds + "; Path=" + request.getContextPath() + "; Max-Age=" + TIMEOUT + ";";
+            String loginCookie = COOKIE_ALFLOGIN + "=" + Long.toString(timeInSeconds) + "; Path=" + request.getContextPath() + "; Max-Age=" + TIMEOUT + ";";
             if (securedSession)
             {
                 loginCookie = loginCookie + " Secure; HttpOnly;";
@@ -128,9 +135,10 @@ public class AuthenticationUtil
             }
 
             response.addHeader(HttpHeaders.SET_COOKIE, loginCookie);
+
             if (isGuest(userId) == false)
             {
-                String userCookie = "alfUsername3=" + URLEncoder.encode(userId) + "; Path=" + request.getContextPath() + "; Max-Age=" + TIMEOUT + ";";
+                String userCookie = COOKIE_ALFUSER + "=" + URLEncoder.encode(userId) + "; Path=" + request.getContextPath() + "; Max-Age=" + TIMEOUT + ";";
                 if (securedSession)
                 {
                     userCookie = userCookie + " Secure; HttpOnly;";
@@ -220,8 +228,11 @@ public class AuthenticationUtil
         return cookie;
     }
 
+    /**
+     * MNT-20208 (LM-190131): Helper function to get 'http.secured.session' flag set in JAVA_OPTS.
+     */
     private static boolean getHttpSecuredSession()
     {
-        return Boolean.parseBoolean(System.getProperty(HTTP_SECURED_SESSION_PROP));
+    	return Boolean.parseBoolean(System.getProperty(HTTP_SECURED_SESSION_PROP));
     }
 }
