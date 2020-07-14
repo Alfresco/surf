@@ -23,6 +23,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.net.HttpHeaders;
 import org.springframework.extensions.surf.UserFactory;
 import org.springframework.extensions.surf.support.AbstractUserFactory;
 import org.springframework.extensions.surf.util.URLEncoder;
@@ -37,41 +38,52 @@ public class AuthenticationUtil
     private static final String COOKIE_ALFLOGIN = "alfLogin";
     private static final String COOKIE_ALFUSER = "alfUsername3";
     private static final int TIMEOUT = 60*60*24*7;
-    
+
     private static final String MT_GUEST_PREFIX = AbstractUserFactory.USER_GUEST + "@"; // eg. for MT Share
-    
-    
+    private static final String HTTP_SECURED_SESSION_PROP = "http.secured.session";
+    private static final String COOKIES_SAMESITE = "cookies.sameSite";
+
     public static void logout(HttpServletRequest request, HttpServletResponse response)
     {
         // invalidate the web session - will remove all session bound objects
         // such as connector sessions, theme settings etc.
         request.getSession().invalidate();
-        
+
         // remove cookie
         if (response != null)
         {
-            Cookie userCookie = new Cookie(COOKIE_ALFUSER, "");
-            userCookie.setPath(request.getContextPath());
-            userCookie.setMaxAge(0);
-            response.addCookie(userCookie);
+            boolean securedSession = getHttpSecuredSession();
+            String userCookie = "alfUsername3=; Path=" + request.getContextPath() + "; Max-Age=0;";
+            if (securedSession)
+            {
+                userCookie = userCookie + " Secure; HttpOnly;";
+            }
+
+            String sameSite = System.getProperty(COOKIES_SAMESITE);
+            if (sameSite != null)
+            {
+                userCookie = userCookie + " SameSite=" + sameSite + ";";
+            }
+
+            response.addHeader(HttpHeaders.SET_COOKIE, userCookie);
         }
     }
-    
+
     public static void login(HttpServletRequest request, String userId)
     {
         login(request, null, userId, true);
     }
-    
+
     public static void login(HttpServletRequest request, HttpServletResponse response, String userId)
     {
         login(request, response, userId, true);
     }
-    
+
     public static void login(HttpServletRequest request, HttpServletResponse response, String userId, boolean logout)
     {
         login(request, response, userId, logout, true);
     }
-    
+
     public static void login(HttpServletRequest request, HttpServletResponse response, String userId, boolean logout, boolean setLoginCookies)
     {
         if (logout)
@@ -84,66 +96,92 @@ public class AuthenticationUtil
                 logout(request, response);
             }
         }
-        
+
         // place user id onto the session
         request.getSession().setAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID, userId);
-        
+
         // set login and last username cookies
+        boolean securedSession = getHttpSecuredSession();
+        String sameSite = System.getProperty(COOKIES_SAMESITE);
+
+        if (response != null && response.containsHeader(HttpHeaders.SET_COOKIE) && securedSession) {
+            String cookie = "JSESSIONID=" + request.getSession().getId() + "; Path=" + request.getContextPath() + "; HttpOnly; Secure;";
+            if (sameSite != null) {
+                cookie = cookie + " SameSite=" + sameSite + ";";
+            }
+
+            response.addHeader(HttpHeaders.SET_COOKIE, cookie);
+        }
+
         if (response != null && setLoginCookies)
         {
             long timeInSeconds = System.currentTimeMillis() / 1000L;
-            Cookie loginCookie = new Cookie(COOKIE_ALFLOGIN, Long.toString(timeInSeconds));
-            loginCookie.setPath(request.getContextPath());
-            loginCookie.setMaxAge(TIMEOUT);
-            response.addCookie(loginCookie);
-            
+            String loginCookie = "alfLogin=" + timeInSeconds + "; Path=" + request.getContextPath() + "; Max-Age=" + TIMEOUT + ";";
+            if (securedSession)
+            {
+                loginCookie = loginCookie + " Secure; HttpOnly;";
+            }
+
+            if (sameSite != null)
+            {
+                loginCookie = loginCookie + " SameSite=" + sameSite + ";";
+            }
+
+            response.addHeader(HttpHeaders.SET_COOKIE, loginCookie);
             if (isGuest(userId) == false)
             {
-                Cookie userCookie;
-                userCookie = new Cookie(COOKIE_ALFUSER, URLEncoder.encode(userId));
-                userCookie.setPath(request.getContextPath());
-                userCookie.setMaxAge(TIMEOUT);
-                response.addCookie(userCookie);
+                String userCookie = "alfUsername3=" + URLEncoder.encode(userId) + "; Path=" + request.getContextPath() + "; Max-Age=" + TIMEOUT + ";";
+                if (securedSession)
+                {
+                    userCookie = userCookie + " Secure; HttpOnly;";
+                }
+
+                if (sameSite != null)
+                {
+                    userCookie = userCookie + " SameSite=" + sameSite + ";";
+                }
+
+                response.addHeader(HttpHeaders.SET_COOKIE, userCookie);
             }
         }
     }
-    
+
     public static void clearUserContext(HttpServletRequest request)
     {
         request.getSession().removeAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
         request.getSession().removeAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_OBJECT);
     }
-    
+
     public static boolean isAuthenticated(HttpServletRequest request)
     {
         // get user id from the session
         String userId = (String)request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
-        
+
         // return whether is non-null and not 'guest'
         return (userId != null && !isGuest(userId));
     }
-    
+
     public static boolean isGuest(String userId)
     {
         // return whether 'guest' (or 'guest@tenant')
         return (userId != null && (UserFactory.USER_GUEST.equals(userId) || userId.startsWith(MT_GUEST_PREFIX)));
     }
-    
+
     public static boolean isExternalAuthentication(HttpServletRequest request)
     {
         return (request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_EXTERNAL_AUTH) != null);
     }
-    
+
     public static String getUserId(HttpServletRequest request)
     {
         return (String)request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
     }
-    
+
     /**
      * Helper to return cookie that saves the last login time for the current user.
-     * 
+     *
      * @param request HttpServletRequest
-     * 
+     *
      * @return Cookie if found or null if not present
      */
     public static Cookie getLastLoginCookie(HttpServletRequest request)
@@ -153,16 +191,16 @@ public class AuthenticationUtil
 
     /**
      * Helper to return cookie that saves the last login time for the current user.
-     * 
+     *
      * @param request HttpServletRequest
-     * 
+     *
      * @return Cookie if found or null if not present
      */
     public static Cookie getUsernameCookie(HttpServletRequest request)
     {
         return getCookie(request, COOKIE_ALFUSER);
     }
-    
+
     private static Cookie getCookie(HttpServletRequest request, String name)
     {
         Cookie cookie = null;
@@ -180,5 +218,10 @@ public class AuthenticationUtil
             }
         }
         return cookie;
+    }
+
+    private static boolean getHttpSecuredSession()
+    {
+        return Boolean.parseBoolean(System.getProperty(HTTP_SECURED_SESSION_PROP));
     }
 }
