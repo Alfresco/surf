@@ -189,9 +189,9 @@ public class AuthenticationUtil
     
     /**
      * Helper to return cookie that saves the last login time for the current user.
-     *
+     * 
      * @param request HttpServletRequest
-     *
+     * 
      * @return Cookie if found or null if not present
      */
     public static Cookie getLastLoginCookie(HttpServletRequest request)
@@ -201,9 +201,9 @@ public class AuthenticationUtil
 
     /**
      * Helper to return cookie that saves the last login time for the current user.
-     *
+     * 
      * @param request HttpServletRequest
-     *
+     * 
      * @return Cookie if found or null if not present
      */
     public static Cookie getUsernameCookie(HttpServletRequest request)
@@ -229,12 +229,12 @@ public class AuthenticationUtil
         }
         return cookie;
     }
-    
+
     /**
      * MNT-20208 (LM-190131): Helper function to get 'http.secured.session' flag set in JAVA_OPTS.
      */
     private static boolean getHttpSecuredSession()
     {
-    	return Boolean.parseBoolean(System.getProperty(HTTP_SECURED_SESSION_PROP));
+        return Boolean.parseBoolean(System.getProperty(HTTP_SECURED_SESSION_PROP));
     }
 }
