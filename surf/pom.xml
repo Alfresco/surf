@@ -57,7 +57,7 @@
       <!-- Surf projects historically use 'spring.version' property -->
       <spring.version>5.1.15.RELEASE</spring.version>
       <dependency.alfresco-core.version>7.33</dependency.alfresco-core.version>
-      <dependency.webscripts.version>7.16</dependency.webscripts.version>
+        <dependency.webscripts.version>7.17</dependency.webscripts.version>
       <dependency.freemarker.version>2.3.28</dependency.freemarker.version>
       <dependency.rhino.version>1.7.11</dependency.rhino.version>
       <dependency.yui.version>2.9.0-alfresco-20141223</dependency.yui.version>
