@@ -1,0 +1,186 @@
+import com.atlassian.bamboo.specs.api.BambooSpec;
+import com.atlassian.bamboo.specs.api.builders.BambooKey;
+import com.atlassian.bamboo.specs.api.builders.BambooOid;
+import com.atlassian.bamboo.specs.api.builders.Variable;
+import com.atlassian.bamboo.specs.api.builders.credentials.SharedCredentialsIdentifier;
+import com.atlassian.bamboo.specs.api.builders.notification.Notification;
+import com.atlassian.bamboo.specs.api.builders.permission.PermissionType;
+import com.atlassian.bamboo.specs.api.builders.permission.Permissions;
+import com.atlassian.bamboo.specs.api.builders.permission.PlanPermissions;
+import com.atlassian.bamboo.specs.api.builders.plan.Job;
+import com.atlassian.bamboo.specs.api.builders.plan.Plan;
+import com.atlassian.bamboo.specs.api.builders.plan.PlanIdentifier;
+import com.atlassian.bamboo.specs.api.builders.plan.Stage;
+import com.atlassian.bamboo.specs.api.builders.plan.branches.BranchCleanup;
+import com.atlassian.bamboo.specs.api.builders.plan.branches.PlanBranchManagement;
+import com.atlassian.bamboo.specs.api.builders.plan.configuration.AllOtherPluginsConfiguration;
+import com.atlassian.bamboo.specs.api.builders.plan.configuration.ConcurrentBuilds;
+import com.atlassian.bamboo.specs.api.builders.project.Project;
+import com.atlassian.bamboo.specs.api.builders.repository.VcsChangeDetection;
+import com.atlassian.bamboo.specs.api.builders.requirement.Requirement;
+import com.atlassian.bamboo.specs.builders.notification.CommittersRecipient;
+import com.atlassian.bamboo.specs.builders.notification.JobFailedNotification;
+import com.atlassian.bamboo.specs.builders.notification.WatchersRecipient;
+import com.atlassian.bamboo.specs.builders.repository.git.GitRepository;
+import com.atlassian.bamboo.specs.builders.repository.viewer.FishEyeRepositoryViewer;
+import com.atlassian.bamboo.specs.builders.task.CheckoutItem;
+import com.atlassian.bamboo.specs.builders.task.MavenTask;
+import com.atlassian.bamboo.specs.builders.task.VcsCheckoutTask;
+import com.atlassian.bamboo.specs.builders.trigger.RepositoryPollingTrigger;
+import com.atlassian.bamboo.specs.util.BambooServer;
+import com.atlassian.bamboo.specs.util.MapBuilder;
+
+@BambooSpec
+public class PlanSpec {
+    public static void main(String... argv) {
+        //By default credentials are read from the '.credentials' file.
+        BambooServer bambooServer = new BambooServer("https://bamboo.alfresco.com/bamboo");
+        
+        Plan plan = new Plan(new Project()
+                .oid(new BambooOid("9q4untnodhxr"))
+                .key(new BambooKey("SRVC"))
+                .name("Services"),
+            "Surf Webscripts",
+            new BambooKey("SURF"))
+            .oid(new BambooOid("9pv5g8agjpon"))
+            .description("WARNING! this build plan is moved to Travis - https://travis-ci.com/Alfresco/surf-webscripts")
+            .enabled(false)
+            .pluginConfigurations(new ConcurrentBuilds()
+                    .useSystemWideDefault(false),
+                new AllOtherPluginsConfiguration()
+                    .configuration(new MapBuilder()
+                            .put("custom", new MapBuilder()
+                                .put("com.pronetbeans.bamboo.amazonS3.awscredentials", new MapBuilder()
+                                    .put("accesskey", "")
+                                    .put("secretkey", "")
+                                    .build())
+                                .put("buildExpiryConfig.enabled", "false")
+                                .build())
+                            .build()))
+            .stages(new Stage("Default Stage")
+                    .jobs(new Job("Default Job",
+                            new BambooKey("JOB1"))
+                            .pluginConfigurations(new AllOtherPluginsConfiguration()
+                                    .configuration(new MapBuilder()
+                                            .put("repositoryDefiningWorkingDirectory", -1)
+                                            .put("custom", new MapBuilder()
+                                                .put("auto", new MapBuilder()
+                                                    .put("regex", "")
+                                                    .put("label", "")
+                                                    .build())
+                                                .put("buildHangingConfig.enabled", "false")
+                                                .put("ncover.path", "")
+                                                .put("clover", new MapBuilder()
+                                                    .put("path", "")
+                                                    .put("license", "")
+                                                    .put("integration", "custom")
+                                                    .build())
+                                                .put("sysbliss", new MapBuilder()
+                                                    .put("pre", new MapBuilder()
+                                                        .put("env", "")
+                                                        .put("command.run.location", "A")
+                                                        .build())
+                                                    .put("post.command.run.location", "S")
+                                                    .put("success", new MapBuilder()
+                                                        .put("env", "")
+                                                        .put("command", "")
+                                                        .build())
+                                                    .put("failed", new MapBuilder()
+                                                        .put("env", "")
+                                                        .put("command", "")
+                                                        .build())
+                                                    .build())
+                                                .build())
+                                            .build()))
+                            .tasks(new VcsCheckoutTask()
+                                    .description("Checkout Default Repository")
+                                    .checkoutItems(new CheckoutItem().defaultRepository()),
+                                new MavenTask()
+                                    .description("Build")
+                                    .goal("--batch-mode -U clean org.jacoco:jacoco-maven-plugin:0.7.4.201502262128:prepare-agent install -Dmaven.test.failure.ignore=true")
+                                    .jdk("JDK 1.8")
+                                    .executableLabel("Maven 3")
+                                    .hasTests(true),
+                                new MavenTask()
+                                    .description("Sonar")
+                                    .enabled(false)
+                                    .goal("--batch-mode sonar:sonar")
+                                    .jdk("JDK 1.8")
+                                    .executableLabel("Maven 3")
+                                    .testResultsPath("**/target/surefire-reports/*.xml,**/target/failsafe-reports/*.xml"),
+                                new MavenTask()
+                                    .description("WhiteSource Scan")
+                                    .goal("--batch-mode clean install -DskipTests org.whitesource:whitesource-maven-plugin:update\n-Dorg.whitesource.failOnError=true \n-Dorg.whitesource.checkPolicies=true \n-Dorg.whitesource.ignorePomModules=false \n-Dorg.whitesource.forceUpdate=true \n-Dorg.whitesource.forceCheckAllDependencies=true\n\"-Dorg.whitesource.product=Alfresco Surf Webscripts\"\n\"-Dorg.whitesource.aggregateModules=true\"\n\"-Dorg.whitesource.aggregateProjectName=Webscripts\"")
+                                    .jdk("JDK 1.8")
+                                    .executableLabel("Maven 3"))
+                            .requirements(new Requirement("elastic"))),
+                new Stage("Release")
+                    .manual(true)
+                    .jobs(new Job("Release",
+                            new BambooKey("RELEASE"))
+                            .pluginConfigurations(new AllOtherPluginsConfiguration()
+                                    .configuration(new MapBuilder()
+                                            .put("repositoryDefiningWorkingDirectory", -1)
+                                            .build()))
+                            .tasks(new VcsCheckoutTask()
+                                    .description("Checkout Default Repository")
+                                    .checkoutItems(new CheckoutItem().defaultRepository())
+                                    .cleanCheckout(true),
+                                new MavenTask()
+                                    .description("Build")
+                                    .goal("--batch-mode \n-DreleaseVersion=${bamboo.release.version} \n-DdevelopmentVersion=${bamboo.development.version} \n-DskipTests \n\"-Darguments=-DskipTests -Dmaven.javadoc.failOnError=false\"\nrelease:prepare release:perform")
+                                    .environmentVariables("GIT_AUTHOR_NAME=alfresco-build GIT_AUTHOR_EMAIL=build@alfresco.com GIT_COMMITTER_NAME=alfresco-build GIT_COMMITTER_EMAIL=build@alfresco.com")
+                                    .jdk("JDK 1.8")
+                                    .executableLabel("Maven 3"))
+                            .finalTasks(new MavenTask()
+                                    .description("Rollback")
+                                    .enabled(false)
+                                    .goal("--batch-mode release:rollback")
+                                    .jdk("JDK 1.7")
+                                    .executableLabel("Maven 3"))
+                            .requirements(new Requirement("elastic"))))
+            .planRepositories(new GitRepository()
+                    .name("GitHub")
+                    .oid(new BambooOid("9pzb420p1z4o"))
+                    .repositoryViewer(new FishEyeRepositoryViewer()
+                            .fishEyeUrl("https://fisheye.alfresco.com")
+                            .repositoryName("services")
+                            .repositoryPath("services"))
+                    .url("git@github.com:Alfresco/surf-webscripts.git")
+                    .branch("master")
+                    .authentication(new SharedCredentialsIdentifier("buildagent SSH key")
+                        .oid(new BambooOid("9q90bndwveo1")))
+                    .changeDetection(new VcsChangeDetection()))
+            
+            .triggers(new RepositoryPollingTrigger())
+            .variables(new Variable("development.version",
+                    "-SNAPSHOT"),
+                new Variable("release.version",
+                    ""),
+                new Variable("subversion.password",
+                    "BAMSCRT@0@0@vPRHlsdIndEF/UeHLM2X+Q=="))
+            .planBranchManagement(new PlanBranchManagement()
+                    .createForVcsBranchMatching("(feature|fix)/.*")
+                    .delete(new BranchCleanup()
+                        .whenRemovedFromRepositoryAfterDays(7)
+                        .whenInactiveInRepositoryAfterDays(30))
+                    .notificationForCommitters())
+            .notifications(new Notification()
+                    .type(new JobFailedNotification())
+                    .recipients(new CommittersRecipient(),
+                        new WatchersRecipient()));
+        
+        bambooServer.publish(plan);
+        
+        PlanPermissions planPermission = new PlanPermissions(new PlanIdentifier("SRVC", "SURF"))
+            .permissions(new Permissions()
+                    .userPermissions("slanglois", PermissionType.ADMIN, PermissionType.VIEW, PermissionType.CLONE, PermissionType.BUILD, PermissionType.EDIT)
+                    .userPermissions("cchelaru", PermissionType.VIEW, PermissionType.EDIT, PermissionType.BUILD, PermissionType.CLONE, PermissionType.ADMIN)
+                    .userPermissions("abalmus", PermissionType.VIEW, PermissionType.EDIT, PermissionType.BUILD, PermissionType.CLONE, PermissionType.ADMIN)
+                    .userPermissions("anechifor", PermissionType.VIEW, PermissionType.EDIT, PermissionType.BUILD, PermissionType.CLONE, PermissionType.ADMIN)
+                    .loggedInUserPermissions(PermissionType.VIEW, PermissionType.BUILD)
+                    .anonymousUserPermissionView());
+        
+        bambooServer.publish(planPermission);
+    }
+}
