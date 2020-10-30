@@ -112,16 +112,12 @@ public class AuthenticationUtil
         // set login and last username cookies
         if (response != null && securedSession)
         {
-            if (response.containsHeader(HttpHeaders.SET_COOKIE) || getCookie(request, "JSESSIONID") != null)
+            String cookie = "JSESSIONID=" + request.getSession().getId() + "; Path=" + request.getContextPath() + "; HttpOnly; Secure;";
+            if (sameSite != null)
             {
-                String cookie = "JSESSIONID=" + request.getSession().getId() + "; Path=" + request.getContextPath() + "; HttpOnly; Secure;";
-                if (sameSite != null)
-                {
-                    cookie = cookie + " SameSite=" + sameSite + ";";
-                }
-
-                response.addHeader(HttpHeaders.SET_COOKIE, cookie);
+                cookie = cookie + " SameSite=" + sameSite + ";";
             }
+            response.addHeader(HttpHeaders.SET_COOKIE, cookie);
         }
         
         if (response != null && setLoginCookies)
