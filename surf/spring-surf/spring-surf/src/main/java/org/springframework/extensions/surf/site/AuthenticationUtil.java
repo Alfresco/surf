@@ -110,7 +110,7 @@ public class AuthenticationUtil
         String sameSite = System.getProperty(COOKIES_SAMESITE);
         
         // set login and last username cookies
-        if (response != null && response.containsHeader(HttpHeaders.SET_COOKIE) && securedSession)
+        if (response != null && securedSession)
         {
             String cookie = "JSESSIONID=" + request.getSession().getId() + "; Path=" + request.getContextPath() + "; HttpOnly; Secure;";
             if (sameSite != null)
