@@ -3,6 +3,6 @@
   <description>Surf API - Adds a page to template association</description>
   <url>/api/surf/page/{id}/template/{templateId}?f={formatId?}</url>
   <format default="json">argument</format>
-  <authentication>none</authentication>
+  <authentication>admin</authentication>
   <transaction>required</transaction>
 </webscript>
