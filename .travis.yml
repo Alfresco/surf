@@ -39,7 +39,7 @@ jobs:
     - name: "Source Clear Scan (SCA)"
       stage: build
       # only on SP branches or master and if it is not a PR
-      if: fork = false AND (branch =~ /support\/.*/) AND type != pull_request AND commit_message !~ /\[no-release\]/
+      if: fork = false AND (branch = develop OR branch =~ /support\/SP\/.*/ OR branch =~ /^APPS-.*$/) AND type != pull_request
       # Run Veracode
       install: skip
       script: travis_wait 30 bash _ci/source_clear.sh
