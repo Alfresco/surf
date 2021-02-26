@@ -3,6 +3,6 @@
   <description>Surf API - list of configured formats</description>
   <url>/api/surf/formats</url>
   <format default="html">argument</format>
-  <authentication>none</authentication>
+  <authentication>admin</authentication>
   <transaction>required</transaction>
 </webscript>

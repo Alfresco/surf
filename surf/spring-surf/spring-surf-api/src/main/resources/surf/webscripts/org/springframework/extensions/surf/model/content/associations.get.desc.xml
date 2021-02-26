@@ -7,6 +7,6 @@
   <url>/api/surf/content/instance/associations?dest={dest?}&amp;assocType={assocType?}&amp;f={format?}</url>
   <url>/api/surf/content/instance/{id}/associations?dest={dest?}&amp;assocType={assocType?}&amp;f={format?}</url>
   <format default="json">argument</format>
-  <authentication>none</authentication>
+  <authentication>admin</authentication>
   <transaction>required</transaction>
 </webscript>
