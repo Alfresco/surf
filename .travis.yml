@@ -13,7 +13,6 @@ branches:
     - develop
     - /^APPS-.*$/
     - /support\/.*/
-    - fix/MNT-22155_auth_admin_ws
     
 before_install:
   - cd surf
@@ -49,7 +48,7 @@ jobs:
       script: travis_retry mvn test
     - stage: release
       name: "Push to Nexus"
-      if: fork = false AND (branch =~ /support\/.*/ OR branch=fix/MNT-22155_auth_admin_ws) AND type != pull_request AND commit_message !~ /\[no-release\]/
+      if: fork = false AND (branch =~ /support\/.*/ AND type != pull_request AND commit_message !~ /\[no-release\]/
       script:
         # Use full history for release
         - git checkout -B "${TRAVIS_BRANCH}"
