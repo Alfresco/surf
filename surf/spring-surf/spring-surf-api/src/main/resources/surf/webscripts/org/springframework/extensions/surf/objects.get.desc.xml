@@ -3,6 +3,6 @@
   <description>Surf API - Retrieve list of objects</description>
   <url>/api/surf/objects/{type}</url>
   <format default="json">argument</format>
-  <authentication>none</authentication>
+  <authentication>admin</authentication>
   <transaction>required</transaction>
 </webscript>

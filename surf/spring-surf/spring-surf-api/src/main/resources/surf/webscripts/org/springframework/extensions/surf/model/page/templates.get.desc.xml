@@ -3,6 +3,6 @@
   <description>Surf API - Retrieves Page Templates</description>
   <url>/api/surf/page/{id}/templates</url>
   <format default="html">argument</format>
-  <authentication>none</authentication>
+  <authentication>admin</authentication>
   <transaction>required</transaction>
 </webscript>
