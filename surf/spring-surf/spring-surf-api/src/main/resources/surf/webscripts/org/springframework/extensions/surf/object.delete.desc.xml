@@ -3,6 +3,6 @@
   <description>Surf API - Delete an object</description>
   <url>/api/surf/object/{type}/{id}</url>
   <format default="json">argument</format>
-  <authentication>none</authentication>
+  <authentication>admin</authentication>
   <transaction>required</transaction>
 </webscript>

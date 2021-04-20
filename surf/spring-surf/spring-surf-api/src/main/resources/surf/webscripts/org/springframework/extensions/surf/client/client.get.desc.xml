@@ -3,6 +3,6 @@
   <description>Surf - Client JS API</description>
   <url>/surf/js</url>
   <format default="html">argument</format>
-  <authentication>none</authentication>
+  <authentication>admin</authentication>
   <transaction>required</transaction>
 </webscript>
