@@ -181,7 +181,12 @@ public class AuthenticationUtil
     {
         return (request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_EXTERNAL_AUTH) != null);
     }
-    
+
+    public static boolean isAimsAuthentication(HttpServletRequest request)
+    {
+        return (request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_EXTERNAL_AUTH_AIMS) != null);
+    }
+
     public static String getUserId(HttpServletRequest request)
     {
         return (String)request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID);
