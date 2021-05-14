@@ -291,6 +291,16 @@ public final class ScriptRenderContext extends ScriptBase
         HttpServletRequest request = ServletUtil.getRequest();
         return AuthenticationUtil.isExternalAuthentication(request);
     }
+
+    @ScriptMethod
+    (
+            help="Returns whether the current user is AIMS authenticated."
+    )
+    public boolean getAimsAuthentication()
+    {
+        HttpServletRequest request = ServletUtil.getRequest();
+        return AuthenticationUtil.isAimsAuthentication(request);
+    }
     
     @ScriptMethod 
     (

@@ -43,6 +43,11 @@ public interface UserFactory
     /** flag to set in the user Session when an external authentication mechanism is used
      *  this informs the framework that user cannot Change Password or Logout in the usual way */
     public static final String SESSION_ATTRIBUTE_EXTERNAL_AUTH= "_alfExternalAuth";
+
+    /** flag to set in the user Session when AIMS authentication mechanism is used
+     *  this informs the framework that user cannot Change Password or Logout in the usual way
+     *  and preserve the original SESSION_ATTRIBUTE_EXTERNAL_AUTH (used for Kerberos, Ldap,etc)*/
+    public static final String SESSION_ATTRIBUTE_EXTERNAL_AUTH_AIMS= "_alfExternalAuthAIMS";
     
     /**
      * Authenticates the given user credentials against the user provider
