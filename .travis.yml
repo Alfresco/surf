@@ -13,6 +13,7 @@ branches:
     - develop
     - /^APPS-.*$/
     - /support\/.*/
+    - /fix\/.*/
 
 before_install:
   - cd surf
@@ -39,7 +40,7 @@ jobs:
     - name: "Source Clear Scan (SCA)"
       stage: build
       # only on SP branches or master and if it is not a PR
-      if: fork = false AND (branch =~ /support\/.*/) AND type != pull_request AND commit_message !~ /\[no-release\]/
+      if: fork = false AND (branch =~ /fix\/.*/) AND type != pull_request AND commit_message !~ /\[no-release\]/
       # Run Veracode
       install: skip
       script: travis_wait 30 bash _ci/source_clear.sh
@@ -48,7 +49,7 @@ jobs:
       script: travis_retry mvn test
     - stage: release
       name: "Push to Nexus"
-      if: fork = false AND (branch =~ /support\/.*/) AND type != pull_request AND commit_message !~ /\[no-release\]/
+      if: fork = false AND (branch =~ /fix\/.*/) AND type != pull_request AND commit_message !~ /\[no-release\]/
       script:
         # Use full history for release
         - git checkout -B "${TRAVIS_BRANCH}"
