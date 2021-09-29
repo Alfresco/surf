@@ -8,7 +8,7 @@
     <parent>
        <groupId>org.alfresco.surf</groupId>
        <artifactId>spring-surf-cmis</artifactId>
-       <version>8.15-SNAPSHOT</version>
+       <version>8.15</version>
        <relativePath>../pom.xml</relativePath>
     </parent>
     
