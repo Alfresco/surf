@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.alfresco.surf</groupId>
         <artifactId>surf-parent</artifactId>
-        <version>7.19-SNAPSHOT</version>
+        <version>7.19</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
