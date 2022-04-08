@@ -80,30 +80,6 @@
          <artifactId>freemarker</artifactId>
          <version>${dependency.freemarker.version}</version>
       </dependency>
-
-      <dependency>
-         <groupId>org.alfresco</groupId>
-         <artifactId>alfresco-core</artifactId>
-         <version>${dependency.alfresco-core.version}</version>
-         <exclusions>
-            <exclusion>
-               <groupId>org.hibernate</groupId>
-               <artifactId>hibernate</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>org.mybatis</groupId>
-               <artifactId>mybatis</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>org.mybatis</groupId>
-               <artifactId>mybatis-spring</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>org.quartz-scheduler</groupId>
-               <artifactId>quartz</artifactId>
-            </exclusion>
-         </exclusions>
-      </dependency>
       <dependency>
          <groupId>org.alfresco.surf</groupId>
          <artifactId>spring-surf-core</artifactId>
