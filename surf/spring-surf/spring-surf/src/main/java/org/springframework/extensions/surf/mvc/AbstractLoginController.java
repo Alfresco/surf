@@ -87,13 +87,10 @@ public abstract class AbstractLoginController extends AbstractController
         {
             // check whether there is already a user logged in
             HttpSession session = request.getSession(false);
-            // handle SSO which doesn't set a user until later
-            if (session != null && request.getSession().getAttribute(UserFactory.SESSION_ATTRIBUTE_KEY_USER_ID) != null)
-            {
-                // destroy old session and log out the current user
-                AuthenticationUtil.logout(request, response);
-            }
             
+            // destroy old session and log out the current user
+              AuthenticationUtil.logout(request, response);
+           
             // see if we can authenticate the user
             boolean authenticated = this.userFactory.authenticate(request, username, password);
             if (authenticated)
