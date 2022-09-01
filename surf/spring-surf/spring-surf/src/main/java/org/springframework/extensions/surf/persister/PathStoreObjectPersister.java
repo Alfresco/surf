@@ -210,6 +210,8 @@ public class PathStoreObjectPersister extends AbstractStoreObjectPersister imple
         }
         catch (IOException ex)
         {
+            //Remove pre-existing cached items that may have been updated
+            cacheRemove(context,modelObject);
             throw new ModelObjectPersisterException("Unable to save object: " + oldPath + " due to error: "
                     + ex.getMessage(), ex);
         }
