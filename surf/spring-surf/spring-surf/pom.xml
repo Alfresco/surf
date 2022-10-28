@@ -61,8 +61,18 @@
          <groupId>com.google.javascript</groupId>
          <artifactId>closure-compiler</artifactId>
          <version>v20160619</version>
+         <exclusions>
+            <exclusion>
+               <groupId>com.google.protobuf</groupId>
+               <artifactId>protobuf-java</artifactId>
+            </exclusion>
+         </exclusions>
       </dependency>
-      
+      <dependency>
+         <groupId>com.google.protobuf</groupId>
+         <artifactId>protobuf-java</artifactId>
+         <version>3.21.7</version>
+      </dependency>
       <!-- This is used for the LESS CSS processing. It allows us to include LESS code in both
            the Theme XML files and in widget CSS files. We deliberately exclude it's preferred
            Rhino version so as to avoid conflicts with our own dependencies. -->
