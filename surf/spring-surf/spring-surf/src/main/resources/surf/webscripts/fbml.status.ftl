@@ -21,7 +21,7 @@
    <tr><td>&nbsp;     
    <@recursestack status.exception/>
  </#if>
- <tr><td><b>Server</b>:<td>${server.edition?html} v${server.version?html} schema ${server.schema?html}
+ <tr><td><b>Server</b>:<td>${server.edition?html} schema ${server.schema?html}
  <tr><td><b>Time</b>:<td>${date?datetime}
  <tr><td>&nbsp;
 </table>
