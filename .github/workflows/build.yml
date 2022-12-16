@@ -1,0 +1,139 @@
+on:
+  push:
+    branches:
+      - develop
+      - "APPS/**"
+      - /support\/.*/
+      - "feature/**"
+
+  pull_request:
+    branches:
+      - develop
+
+  workflow_dispatch:
+    inputs:
+      commitMessage:
+        description: Enter the Commit Message
+        required: true
+
+  env:
+    SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
+    MAVEN_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+    MAVEN_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+    QUAY_USERNAME: ${{ secrets.QUAY_USERNAME }}
+    QUAY_PASSWORD: ${{ secrets.QUAY_PASSWORD }}
+    DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+    DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+    GIT_EMAIL: ${{ secrets.BOT_GITHUB_EMAIL }}
+    GIT_USERNAME: ${{ secrets.BOT_GITHUB_USERNAME }}
+    GIT_PASSWORD: ${{ secrets.BOT_GITHUB_TOKEN }}
+    BRANCH_NAME: ${{ github.ref_name }}
+
+
+jobs:
+  Source_Clear_Scan:
+    if: ${{ startsWith(github.ref_name, 'support/') && github.event_name != 'pull_request' && !contains(github.event.head_commit.message, '[no_release]')}}
+    runs-on: ubuntu-latest
+    steps:
+      # Typical Java workflow steps
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: "Set up Java"
+        uses: actions/setup-java@v3
+        with:
+          distribution: adopt
+          java-version: 17
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+
+      - name: "Setup maven"
+        shell: bash
+        run: |
+          [ -d ${HOME}/.m2/ ] || mkdir -p ${HOME}/.m2/  
+          cp -v surf/_ci/settings.xml ${HOME}/.m2/ || cp -v surf/_ci/.travis.settings.xml ${HOME}/.m2/settings.xml
+
+      - name: "Cache the Maven packages to speed up build"
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: "Starting Source Clear Script"
+        run: bash surf/_ci/source_clear.sh
+
+  Build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      # Typical Java workflow steps
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: "Set up Java"
+        uses: actions/setup-java@v3
+        with:
+          distribution: adopt
+          java-version: 17
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+
+      - name: "Setup maven"
+        shell: bash
+        run: |
+          [ -d ${HOME}/.m2/ ] || mkdir -p ${HOME}/.m2/  
+          cp -v surf/_ci/settings.xml ${HOME}/.m2/ || cp -v surf/_ci/.travis.settings.xml ${HOME}/.m2/settings.xml
+
+      - name: "Cache the Maven packages to speed up build"
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: "Run script"
+        run:  mvn test
+
+  Push_to_Nexus:
+    if: ${{ startsWith(github.ref_name, 'support/') && github.event_name != 'pull_request' && !contains(github.event.head_commit.message, '[no_release]')}}
+    runs-on: ubuntu-latest
+    steps:
+      # Typical Java workflow steps
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: "Set up Java"
+        uses: actions/setup-java@v3
+        with:
+          distribution: adopt
+          java-version: 17
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+
+      - name: "Setup maven"
+        shell: bash
+        run: |
+          [ -d ${HOME}/.m2/ ] || mkdir -p ${HOME}/.m2/  
+          cp -v surf/_ci/settings.xml ${HOME}/.m2/ || cp -v surf/_ci/.travis.settings.xml ${HOME}/.m2/settings.xml
+
+      - name: "Cache the Maven packages to speed up build"
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: "Use full history for release"
+        run:  git checkout -B "$BRANCH_NAME"
+
+      - name: "Get the latest changes on branch"
+        run:  git pull
+
+      - name: "Add email to link commits to user"
+        run:  git config user.email "${GIT_EMAIL}"
+
+      - name: "Skip building of release commits"
+        run:  mvn --batch-mode -q -DscmCommentPrefix="[maven-release-plugin][skip ci] " -Dusername="${GIT_USERNAME}" -Dpassword="${GIT_PASSWORD}" -DskipTests -Darguments=-DskipTests -Darguments=-Dmaven.javadoc.skip=true release:clean release:prepare release:perform
