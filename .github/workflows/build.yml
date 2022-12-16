@@ -96,6 +96,7 @@ jobs:
       - name: "Run script"
         run:  |
              cd surf
+             mvn install -DskipTests=true -B -V
              mvn test
 
   Push_to_Nexus:
