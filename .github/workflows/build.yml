@@ -94,7 +94,9 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: "Run script"
-        run:  mvn test
+        run:  |
+             cd surf
+             mvn test
 
   Push_to_Nexus:
     if: ${{ startsWith(github.ref_name, 'support/') && github.event_name != 'pull_request' && !contains(github.event.head_commit.message, '[no_release]')}}
