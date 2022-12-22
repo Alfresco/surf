@@ -13,7 +13,6 @@ branches:
     - develop
     - /^APPS-.*$/
     - /support\/.*/
-    - /feature\/.*/
     
 before_install:
   - cd surf

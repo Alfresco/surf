@@ -94,7 +94,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: "Run script"
-        run:  |
+        run: |
              cd surf
              mvn install -DskipTests=true -B -V
              mvn test
