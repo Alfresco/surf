@@ -83,8 +83,8 @@ jobs:
       - name: "Run script"
         run: |
              cd surf
-             mvn clean install
              cp _ci/.travis.settings.xml $HOME/.m2/settings.xml
+             mvn clean 
              mvn install -DskipTests=true -B -V
              mvn test
 
