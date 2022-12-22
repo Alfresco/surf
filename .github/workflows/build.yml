@@ -86,13 +86,6 @@ jobs:
           [ -d ${HOME}/.m2/ ] || mkdir -p ${HOME}/.m2/  
           cp -v surf/_ci/settings.xml ${HOME}/.m2/ || cp -v surf/_ci/.travis.settings.xml ${HOME}/.m2/settings.xml
 
-      - name: "Cache the Maven packages to speed up build"
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
       - name: "Run script"
         run: |
              cd surf
