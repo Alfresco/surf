@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - develop
-      - "APPS-**"
-      - /support\/.*/
+      - "**/APPS-**"
+      - "support/**"
   pull_request:
     branches:
       - develop
