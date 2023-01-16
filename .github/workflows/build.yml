@@ -142,4 +142,6 @@ jobs:
         run:  git config user.name "${GIT_USERNAME}"
 
       - name: "Skip building of release commits"
-        run:  mvn --batch-mode -q -DscmCommentPrefix="[maven-release-plugin][skip ci] " -Dusername="${GIT_USERNAME}" -Dpassword="${GIT_PASSWORD}" -DskipTests -Darguments=-DskipTests -Darguments=-Dmaven.javadoc.skip=true release:clean release:prepare release:perform
+        run: |
+          cd surf
+          mvn --batch-mode -q -DscmCommentPrefix="[maven-release-plugin][skip ci] " -Dusername="${GIT_USERNAME}" -Dpassword="${GIT_PASSWORD}" -DskipTests -Darguments=-DskipTests -Darguments=-Dmaven.javadoc.skip=true release:clean release:prepare release:perform
