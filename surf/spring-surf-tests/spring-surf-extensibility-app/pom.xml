@@ -47,11 +47,15 @@
                      <suiteXmlFile>src/test/resources/cachingEnabledSuite.xml</suiteXmlFile>
                      <suiteXmlFile>src/test/resources/cachingDisabledSuite.xml</suiteXmlFile>
                  </suiteXmlFiles>
+                 <argLine>
+                     --add-opens=java.base/java.lang=ALL-UNNAMED
+                     --add-opens=java.base/java.util=ALL-UNNAMED
+                 </argLine>
              </configuration>
          </plugin>
          <plugin>
             <artifactId>maven-war-plugin</artifactId>
-            <version>3.3.2</version>
+            <version>3.4.0</version>
          </plugin>
       </plugins>
    </build>
