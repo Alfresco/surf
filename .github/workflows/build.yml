@@ -6,9 +6,11 @@ on:
       - develop
       - "**/APPS-**"
       - "support/**"
+      - "fix/**"
   pull_request:
     branches:
       - develop
+      - "fix/**"
 
   workflow_dispatch:
     inputs:
