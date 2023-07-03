@@ -21,7 +21,8 @@ package org.springframework.extensions.surf.extensibility.impl;
 import java.io.IOException;
 import java.io.Writer;
 
-import javax.servlet.ServletOutputStream;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.WriteListener;
 
 public class ExtensibilityServletOutputStream extends ServletOutputStream
 {
@@ -49,6 +50,16 @@ public class ExtensibilityServletOutputStream extends ServletOutputStream
     public void print(char c) throws IOException
     {
         this.modelWriter.write(c);
+    }
+
+    @Override
+    public boolean isReady() {
+        return false;
+    }
+
+    @Override
+    public void setWriteListener(WriteListener writeListener) {
+
     }
 
     @Override

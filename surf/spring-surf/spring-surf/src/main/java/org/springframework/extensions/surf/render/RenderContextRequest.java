@@ -19,8 +19,8 @@
 
 package org.springframework.extensions.surf.render;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 
 import org.springframework.extensions.surf.ModelObject;
 import org.springframework.extensions.surf.RequestContext;

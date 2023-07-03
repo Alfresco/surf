@@ -22,7 +22,7 @@ package org.springframework.extensions.webeditor.taglib;
 import java.io.IOException;
 import java.io.Writer;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,7 +40,7 @@ public class EndTemplateTag extends AbstractTemplateTag
     protected static final Log logger = LogFactory.getLog(EndTemplateTag.class);
 
     /**
-     * @see javax.servlet.jsp.tagext.TagSupport#doStartTag()
+     * @see jakarta.servlet.jsp.tagext.TagSupport#doStartTag()
      */
     public int doStartTag() throws JspException
     {
@@ -99,7 +99,7 @@ public class EndTemplateTag extends AbstractTemplateTag
     }
 
     /**
-     * @see javax.servlet.jsp.tagext.TagSupport#release()
+     * @see jakarta.servlet.jsp.tagext.TagSupport#release()
      */
     public void release()
     {

@@ -32,15 +32,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.*;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * Implementation of HttpServletRequest that mimicks a servlet originated object and provides identity implementations
@@ -306,11 +302,11 @@ public class FakeHttpServletRequest extends HttpServletRequestWrapper
      * (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#isRequestedSessionIdFromUrl()
      */
-    @Override
+    /*@Override
     public boolean isRequestedSessionIdFromUrl()
     {
         return false;
-    }
+    }*/
 
     /*
      * (non-Javadoc)
@@ -381,6 +377,21 @@ public class FakeHttpServletRequest extends HttpServletRequestWrapper
     {
         return new ServletInputStream()
         {
+            @Override
+            public boolean isFinished() {
+                return false;
+            }
+
+            @Override
+            public boolean isReady() {
+                return false;
+            }
+
+            @Override
+            public void setReadListener(ReadListener readListener) {
+
+            }
+
             @Override
             public int read() throws IOException
             {
@@ -615,7 +626,7 @@ public class FakeHttpServletRequest extends HttpServletRequestWrapper
      * (non-Javadoc)
      * @see javax.servlet.ServletRequest#getRealPath(java.lang.String)
      */
-    @Override
+    //@Override
     public String getRealPath(String path)
     {
         return null;

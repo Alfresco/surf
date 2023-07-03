@@ -29,6 +29,7 @@ env:
   GIT_USERNAME: ${{ secrets.BOT_GITHUB_USERNAME }}
   GIT_PASSWORD: ${{ secrets.BOT_GITHUB_TOKEN }}
   BRANCH_NAME: ${{ github.ref_name }}
+  GIT_HTTP_CREDENTIALS: "${{ secrets.BOT_GITHUB_USERNAME }}:${{ secrets.BOT_GITHUB_TOKEN }}"
 
 jobs:
   Source_Clear_Scan:
