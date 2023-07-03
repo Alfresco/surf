@@ -5,8 +5,6 @@ PS4="\[\e[35m\]+ \[\e[m\]"
 set +e -v -x
 pushd "$(dirname "${BASH_SOURCE[0]}")/../"
 
-$(dirname "${BASH_SOURCE[0]}")/../../jakarta-dependencies/build-dependencies.sh $GIT_HTTP_CREDENTIALS
-
 mvn -B -q clean install \
     -DskipTests \
     -Dmaven.javadoc.skip=true \
