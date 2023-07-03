@@ -21,7 +21,7 @@ package org.springframework.extensions.surf.taglib;
 
 import java.io.UnsupportedEncodingException;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 import org.springframework.extensions.surf.ModelObject;
 import org.springframework.extensions.surf.RequestContext;

@@ -20,7 +20,7 @@ package org.springframework.extensions.surf.taglib;
 
 import java.util.HashMap;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 import org.springframework.extensions.surf.PresetsManager;
 import org.springframework.extensions.surf.exception.ModelObjectPersisterException;
