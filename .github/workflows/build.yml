@@ -89,7 +89,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: "Init"
-        run: bash surf/jakarta-dependencies/init.sh
+        run: bash surf/_ci/init.sh
 
       - name: "Run script"
         run: |
