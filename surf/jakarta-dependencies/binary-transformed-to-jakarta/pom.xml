@@ -12,7 +12,7 @@
    <packaging>pom</packaging>
    <properties>
       <!--<rules.path>${maven.multiModuleProjectDirectory}/binary-transformed-to-jakarta</rules.path>-->
-      <rules.path>${maven.multiModuleProjectDirectory}/jakarta-dependencies/binary-transformed-to-jakarta</rules.path>
+      <rules.path>surf/jakarta-dependencies/binary-transformed-to-jakarta</rules.path>
    </properties>
 
    <build>
