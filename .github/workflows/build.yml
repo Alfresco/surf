@@ -9,6 +9,7 @@ on:
   pull_request:
     branches:
       - develop
+      - "support/**"
 
   workflow_dispatch:
     inputs:
