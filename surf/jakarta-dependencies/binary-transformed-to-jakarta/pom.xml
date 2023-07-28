@@ -33,7 +33,6 @@
    </build>
 
    <modules>
-      <module>freemarker</module>
       <module>commons-fileupload</module>
    </modules>
 </project>
