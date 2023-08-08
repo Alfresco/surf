@@ -88,9 +88,6 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: "Init"
-        run: bash surf/_ci/init.sh
-
       - name: "Run script"
         run: |
           cd surf
