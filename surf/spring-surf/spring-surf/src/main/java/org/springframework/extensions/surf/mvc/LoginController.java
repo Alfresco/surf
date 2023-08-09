@@ -18,8 +18,8 @@
  */
 package org.springframework.extensions.surf.mvc;
  
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.extensions.surf.uri.UriUtils;
  
@@ -37,7 +37,7 @@ public class LoginController extends AbstractLoginController
      * Sends an HTTP redirect response to the success page provided in the request parameters, if present, falling
      * back to root of the web application.
      * 
-     * @see org.springframework.extensions.surf.mvc.AbstractLoginController#onSuccess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see org.springframework.extensions.surf.mvc.AbstractLoginController#onSuccess(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)
      */
 	@Override
     protected void onSuccess(HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -57,7 +57,7 @@ public class LoginController extends AbstractLoginController
      * Sends an HTTP redirect response to the failure page provided in the request parameters, if present, falling
      * back to root of the web application.
      * 
-     * @see org.springframework.extensions.surf.mvc.AbstractLoginController#onSuccess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see org.springframework.extensions.surf.mvc.AbstractLoginController#onSuccess(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)
      */
 	@Override
 	protected void onFailure(HttpServletRequest request, HttpServletResponse response) throws Exception 

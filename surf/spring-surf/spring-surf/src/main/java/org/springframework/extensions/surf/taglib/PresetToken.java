@@ -18,9 +18,9 @@
  */
 package org.springframework.extensions.surf.taglib;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.Tag;
-import javax.servlet.jsp.tagext.TagSupport;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.tagext.Tag;
+import jakarta.servlet.jsp.tagext.TagSupport;
 
 /**
  * <p>This class provides the "presetToken" custom JSP tag that can only be used as a child tag of the

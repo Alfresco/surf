@@ -24,8 +24,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * An implementation of HttpSession which provides a local notion of a session.
@@ -96,10 +96,10 @@ public class FakeHttpSession implements HttpSession
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#getSessionContext()
      */
-    public javax.servlet.http.HttpSessionContext getSessionContext()
+   /* public jakarta.servlet.http.HttpSessionContext getSessionContext()
     {
         return null;
-    }
+    }*/
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#getAttribute(java.lang.String)

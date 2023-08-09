@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.extensions.config.ConfigService;
 import org.springframework.extensions.config.WebFrameworkConfigElement;

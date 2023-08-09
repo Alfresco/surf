@@ -22,7 +22,7 @@ package org.springframework.extensions.surf.mvc;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.extensions.surf.util.I18NUtil;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;

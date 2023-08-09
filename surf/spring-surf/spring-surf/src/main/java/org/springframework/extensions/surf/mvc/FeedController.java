@@ -19,8 +19,8 @@
 
 package org.springframework.extensions.surf.mvc;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.extensions.surf.RequestContext;
 import org.springframework.extensions.surf.UserFactory;
@@ -32,6 +32,8 @@ import org.springframework.extensions.webscripts.connector.CredentialVault;
 import org.springframework.extensions.webscripts.connector.Credentials;
 import org.springframework.extensions.webscripts.connector.CredentialsImpl;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.io.IOException;
 
 /**
  * Controller for feed requests. Feed requests are authenticated via Basic HTTP auth
@@ -71,8 +73,12 @@ public class FeedController extends UrlViewController
         String authorization = req.getHeader("Authorization");
         if (authorization == null || authorization.length() == 0)
         {
-            authorizedResponseStatus(res);
-            
+            try {
+                authorizedResponseStatus(res);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
             // no further processing as authentication is required but not provided
             // the browser will now prompt the user for appropriate credentials
             return null;
@@ -84,9 +90,13 @@ public class FeedController extends UrlViewController
             // test for a "negotiate" header - we will then suggest "basic" as the auth mechanism
             if (authParts[0].equalsIgnoreCase("negotiate"))
             {
-               authorizedResponseStatus(res);
-               
-               // no further processing as authentication is required but not provided
+                try {
+                    authorizedResponseStatus(res);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                // no further processing as authentication is required but not provided
                // the browser will now prompt the user for appropriate credentials
                return null;
             }
@@ -129,8 +139,12 @@ public class FeedController extends UrlViewController
             }
             else
             {
-                authorizedResponseStatus(res);
-                
+                try {
+                    authorizedResponseStatus(res);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
                 return null;
             }
         }
@@ -138,9 +152,8 @@ public class FeedController extends UrlViewController
         return super.handleRequestInternal(req, res);
     }
     
-    private void authorizedResponseStatus(HttpServletResponse res)
-    {
-        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED,
+    private void authorizedResponseStatus(HttpServletResponse res) throws IOException {
+        res.sendError(HttpServletResponse.SC_UNAUTHORIZED,
                 "Requested endpoint requires authentication.");
         res.setHeader("WWW-Authenticate", "Basic realm=\"Alfresco\"");
     }

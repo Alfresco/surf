@@ -24,7 +24,7 @@ import java.io.Writer;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.extensions.config.ServerProperties;
 import org.springframework.extensions.surf.ModelObject;

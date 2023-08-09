@@ -36,10 +36,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.WriteListener;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponseWrapper;
 
 /**
  * Implementation of a Fake HttpServletResponse object which can be used to trap output from
@@ -129,7 +130,7 @@ public class FakeHttpServletResponse extends HttpServletResponseWrapper
     
     /**
      * (non-Javadoc)
-     * @see javax.servlet.ServletResponse#setCharacterEncoding(java.lang.String)
+     * @see jakarta.servlet.ServletResponse#setCharacterEncoding(java.lang.String)
      */
     @Override
     public void setCharacterEncoding(String characterEncoding)
@@ -329,12 +330,12 @@ public class FakeHttpServletResponse extends HttpServletResponseWrapper
      * (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#setStatus(int, java.lang.String)
      */
-    @Override
+   /* @Override
     public void setStatus(int status, String errorMessage)
     {
         this.status = status;
         this.errorMessage = errorMessage;
-    }
+    }*/
 
     /**
      * Gets the status.
@@ -578,12 +579,12 @@ public class FakeHttpServletResponse extends HttpServletResponseWrapper
      * (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#encodeUrl(java.lang.String)
      */
-    @Override
+  /*  @Override
     public String encodeUrl(String url)
     {
         return url;
     }
-
+*/
     /*
      * (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#encodeURL(java.lang.String)
@@ -598,11 +599,11 @@ public class FakeHttpServletResponse extends HttpServletResponseWrapper
      * (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#encodeRedirectUrl(java.lang.String)
      */
-    @Override
+    /*@Override
     public String encodeRedirectUrl(String url)
     {
         return url;
-    }
+    }*/
 
     /*
      * (non-Javadoc)
@@ -889,6 +890,16 @@ public class FakeHttpServletResponse extends HttpServletResponseWrapper
 
         /** The proxy. */
         private final OutputStream proxy;
+
+        @Override
+        public boolean isReady() {
+            return false;
+        }
+
+        @Override
+        public void setWriteListener(WriteListener writeListener) {
+
+        }
     }
 
 }
