@@ -22,8 +22,8 @@ package org.springframework.web.context.support;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import jakarta.servlet.ServletContextEvent;
-import jakarta.servlet.ServletContextListener;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

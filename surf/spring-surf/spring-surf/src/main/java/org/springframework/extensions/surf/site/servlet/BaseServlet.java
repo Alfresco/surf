@@ -21,9 +21,9 @@ package org.springframework.extensions.surf.site.servlet;
 
 import java.util.StringTokenizer;
 
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.extensions.surf.util.I18NUtil;
 

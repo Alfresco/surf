@@ -22,8 +22,8 @@ package org.springframework.extensions.surf.support;
 import java.util.HashMap;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.extensions.surf.RequestContext;
 import org.springframework.extensions.surf.UserFactory;

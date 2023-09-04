@@ -91,8 +91,8 @@
         
       <!-- Java Servlet -->
       <dependency>
-         <groupId>jakarta.servlet.jsp.jstl</groupId>
-         <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+         <groupId>javax.servlet</groupId>
+         <artifactId>jstl</artifactId>
       </dependency>
 
       <!-- Log4j -->
@@ -123,8 +123,8 @@
          <artifactId>commons-el</artifactId>
       </dependency>
       <dependency>
-         <groupId>org.apache.commons</groupId>
-         <artifactId>commons-fileupload2-jakarta</artifactId>
+         <groupId>commons-fileupload</groupId>
+         <artifactId>commons-fileupload</artifactId>
       </dependency>
       <dependency>
          <groupId>commons-io</groupId>
@@ -191,8 +191,8 @@
 
       <!-- Container-provided dependencies-->
       <dependency>
-         <groupId>jakarta.servlet.jsp</groupId>
-         <artifactId>jakarta.servlet.jsp-api</artifactId>
+         <groupId>javax.servlet.jsp</groupId>
+         <artifactId>jsp-api</artifactId>
          <scope>provided</scope>
       </dependency>
       <!-- Test dependencies -->

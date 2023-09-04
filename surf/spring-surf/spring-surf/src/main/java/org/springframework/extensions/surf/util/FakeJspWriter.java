@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 
-import jakarta.servlet.jsp.JspWriter;
+import javax.servlet.jsp.JspWriter;
 
 /**
  * FakeJspWriter.

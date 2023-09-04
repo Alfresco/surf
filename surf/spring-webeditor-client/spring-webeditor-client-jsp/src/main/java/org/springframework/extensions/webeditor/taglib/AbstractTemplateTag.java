@@ -19,8 +19,8 @@
 
 package org.springframework.extensions.webeditor.taglib;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.jsp.tagext.TagSupport;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  * Base class for all Web Editor tag implementations.

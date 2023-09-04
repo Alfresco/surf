@@ -19,7 +19,7 @@
 
 package org.springframework.extensions.surf.taglib;
 
-import jakarta.servlet.jsp.JspException;
+import javax.servlet.jsp.JspException;
 
 /**
  * @author muzquiano

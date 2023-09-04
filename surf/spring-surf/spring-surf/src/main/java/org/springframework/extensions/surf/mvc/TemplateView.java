@@ -19,7 +19,7 @@
 
 package org.springframework.extensions.surf.mvc;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.extensions.config.WebFrameworkConfigElement;
 import org.springframework.extensions.surf.ModelObjectService;

@@ -19,7 +19,7 @@
 
 package org.springframework.extensions.surf.mvc;
 
-import jakarta.servlet.ServletContext;
+import javax.servlet.ServletContext;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

@@ -24,7 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.extensions.config.ConfigService;
 import org.springframework.extensions.config.WebFrameworkConfigElement;
