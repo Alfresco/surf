@@ -6,7 +6,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>alfresco-super-pom</artifactId>
-      <version>12</version>
+      <version>10</version>
    </parent>
 
    <groupId>org.alfresco.surf</groupId>
@@ -64,11 +64,6 @@
       <dependency.httpcomponents.version>4.5.12</dependency.httpcomponents.version>
       <dependency.opencmis.version>0.11.0</dependency.opencmis.version>
       <plugin.jetty.version>8.1.16.v20140903</plugin.jetty.version>
-      <java.version>17</java.version>
-      <maven.build.sourceVersion>${java.version}</maven.build.sourceVersion>
-      <maven.compiler.source>${java.version}</maven.compiler.source>
-      <maven.compiler.target>${java.version}</maven.compiler.target>
-      <maven.compiler.release>${java.version}</maven.compiler.release>      
    </properties>
 
    <dependencies>
