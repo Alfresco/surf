@@ -21,8 +21,8 @@ package org.springframework.extensions.surf.test;
 
 import java.io.File;
 
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletException;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.extensions.surf.ModelObjectService;

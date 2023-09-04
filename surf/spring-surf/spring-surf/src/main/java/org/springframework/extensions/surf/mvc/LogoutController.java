@@ -19,8 +19,8 @@
 
 package org.springframework.extensions.surf.mvc;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.extensions.surf.site.AuthenticationUtil;
 import org.springframework.web.servlet.ModelAndView;

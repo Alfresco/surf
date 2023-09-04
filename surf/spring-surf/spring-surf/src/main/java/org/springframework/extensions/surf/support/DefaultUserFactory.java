@@ -19,7 +19,7 @@
 
 package org.springframework.extensions.surf.support;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.extensions.surf.RequestContext;
 import org.springframework.extensions.surf.exception.UserFactoryException;

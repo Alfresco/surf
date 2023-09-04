@@ -19,8 +19,8 @@
 
 package org.springframework.extensions.surf.util;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 /**
  * A wrapper class for buffering around HttpServletRequest objects

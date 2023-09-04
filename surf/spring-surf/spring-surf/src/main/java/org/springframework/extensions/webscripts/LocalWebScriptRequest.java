@@ -22,7 +22,7 @@ package org.springframework.extensions.webscripts;
 import java.io.Serializable;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.extensions.config.ServerProperties;
 import org.springframework.extensions.surf.ServletUtil;

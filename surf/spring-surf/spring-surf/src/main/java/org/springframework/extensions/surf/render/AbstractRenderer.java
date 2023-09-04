@@ -21,7 +21,7 @@ package org.springframework.extensions.surf.render;
 
 import java.io.IOException;
 
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.extensions.surf.ModelObject;
 import org.springframework.extensions.surf.RequestContext;

@@ -6,7 +6,7 @@
    <parent>
       <groupId>org.alfresco</groupId>
       <artifactId>alfresco-super-pom</artifactId>
-      <version>12</version>
+      <version>10</version>
    </parent>
 
    <groupId>org.alfresco.surf</groupId>
@@ -55,20 +55,15 @@
 
    <properties>
       <!-- Surf projects historically use 'spring.version' property -->
-      <spring.version>6.0.8</spring.version>
+      <spring.version>5.3.27</spring.version>
       <dependency.alfresco-core.version>8.425</dependency.alfresco-core.version>
-      <dependency.webscripts.version>8.46</dependency.webscripts.version>
-      <dependency.freemarker.version>2.3.30-jakarta-1</dependency.freemarker.version>
+      <dependency.webscripts.version>8.47</dependency.webscripts.version>
+      <dependency.freemarker.version>2.3.30</dependency.freemarker.version>
       <dependency.rhino.version>1.7.13</dependency.rhino.version>
       <dependency.yui.version>2.9.0-alfresco-20141223</dependency.yui.version>
       <dependency.httpcomponents.version>4.5.12</dependency.httpcomponents.version>
       <dependency.opencmis.version>0.11.0</dependency.opencmis.version>
       <plugin.jetty.version>8.1.16.v20140903</plugin.jetty.version>
-      <java.version>17</java.version>
-      <maven.build.sourceVersion>${java.version}</maven.build.sourceVersion>
-      <maven.compiler.source>${java.version}</maven.compiler.source>
-      <maven.compiler.target>${java.version}</maven.compiler.target>
-      <maven.compiler.release>${java.version}</maven.compiler.release>      
    </properties>
 
    <dependencies>
@@ -107,22 +102,11 @@
       </dependency>
 
       <dependency>
-         <groupId>jakarta.servlet</groupId>
-          <artifactId>jakarta.servlet-api</artifactId>
-          <version>6.0.0</version>
+         <groupId>javax.servlet</groupId>
+         <artifactId>javax.servlet-api</artifactId>
+         <version>3.0.1</version>
          <scope>provided</scope>
       </dependency>
-       <dependency>
-           <groupId>jakarta.servlet.jsp</groupId>
-           <artifactId>jakarta.servlet.jsp-api</artifactId>
-           <version>3.1.1</version>
-           <scope>provided</scope>
-       </dependency>
-       <dependency>
-           <groupId>jakarta.el</groupId>
-           <artifactId>jakarta.el-api</artifactId>
-           <version>5.0.0</version>
-       </dependency>
    </dependencies>
 
    <dependencyManagement>
@@ -164,11 +148,11 @@
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.4</version>
         </dependency>
-          <dependency>
-          <groupId>org.apache.commons</groupId>
-          <artifactId>commons-fileupload2-jakarta</artifactId>
-          <version>2.0.0-M1</version>
-          </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.5</version>
+        </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -213,17 +197,17 @@
          <dependency>
             <groupId>org.tuckey</groupId>
             <artifactId>urlrewritefilter</artifactId>
-            <version>4.0.4-jakarta-3</version>
+            <version>4.0.4</version>
          </dependency>
          <dependency>
-             <groupId>jakarta.servlet.jsp</groupId>
-             <artifactId>jakarta.servlet.jsp-api</artifactId>
-             <version>3.1.1</version>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.1</version>
          </dependency>
          <dependency>
-             <groupId>jakarta.servlet.jsp.jstl</groupId>
-             <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-             <version>3.0.0</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
          </dependency>
          <dependency>
             <groupId>junit</groupId>

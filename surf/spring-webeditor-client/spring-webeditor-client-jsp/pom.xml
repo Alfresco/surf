@@ -19,8 +19,8 @@
 
 		<!-- JSP API -->
 		<dependency>
-			<groupId>jakarta.servlet.jsp</groupId>
-			<artifactId>jakarta.servlet.jsp-api</artifactId>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 

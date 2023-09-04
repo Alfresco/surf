@@ -21,7 +21,7 @@ package org.springframework.extensions.webscripts;
 
 import java.io.Serializable;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.extensions.surf.RequestContext;
 import org.springframework.extensions.surf.ServletUtil;
