@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.owasp.encoder.Encode;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
@@ -159,7 +160,7 @@ public class GeneratorController extends AbstractController
 
         try
         {
-            response.getOutputStream().write(baos.toByteArray());
+            response.getOutputStream().write(Encode.forJava(baos.toString()).getBytes());
         }
         catch (IOException e)
         {
