@@ -33,6 +33,7 @@
                <scanTargets>
                   <scanTarget>src/main/webapp</scanTarget>
                </scanTargets>
+                <stopKey/>
              </configuration>
          </plugin>
          <!--  SureFire plug-in configuration TestNG. This overrides the default SureFire settings
@@ -48,6 +49,11 @@
                      <suiteXmlFile>src/test/resources/cachingDisabledSuite.xml</suiteXmlFile>
                  </suiteXmlFiles>
              </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>3.3.2</version>
          </plugin>
       </plugins>
    </build>
