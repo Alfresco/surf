@@ -33,7 +33,6 @@
                <scanTargets>
                   <scanTarget>src/main/webapp</scanTarget>
                </scanTargets>
-                <stopKey/>
              </configuration>
          </plugin>
          <!--  SureFire plug-in configuration TestNG. This overrides the default SureFire settings
