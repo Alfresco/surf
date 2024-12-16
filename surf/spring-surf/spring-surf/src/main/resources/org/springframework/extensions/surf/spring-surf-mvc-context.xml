@@ -13,8 +13,6 @@
        <property name="dependencyAggregator"      ref="dependency.aggregator" />
        <property name="webframeworkConfigElement" ref="webframework.config.element"/>
        <property name="defaultUrl"><value>/resources</value></property>
-       <property name="useExpiresHeader"><value>true</value></property>
-       <property name="useCacheControlHeader"><value>true</value></property>
     </bean>
         
     <!-- Abstract Beans -->
@@ -71,14 +69,10 @@
     <!-- Web Framework Controllers -->
     <bean id="remoteController" class="org.springframework.extensions.surf.mvc.RemoteController">
         <property name="cacheSeconds" value="-1" />
-        <property name="useExpiresHeader"><value>true</value></property>
-        <property name="useCacheControlHeader"><value>true</value></property>
         <property name="frameworkUtil" ref="framework.utils"></property>
     </bean>
     <bean id="loginController" class="org.springframework.extensions.surf.mvc.LoginController">
         <property name="cacheSeconds" value="-1" />
-        <property name="useExpiresHeader"><value>true</value></property>
-        <property name="useCacheControlHeader"><value>true</value></property>
         <property name="userFactory" ref="user.factory"></property>
         <property name="webFrameworkConfiguration" ref="webframework.config.element"></property>
         <property name="supportedMethods">
@@ -91,8 +85,6 @@
     </bean>
     <bean id="logoutController" class="org.springframework.extensions.surf.mvc.LogoutController">
         <property name="cacheSeconds" value="-1" />
-        <property name="useExpiresHeader"><value>true</value></property>
-        <property name="useCacheControlHeader"><value>true</value></property>
         <property name="supportedMethods">
             <list>
                 <value>HEAD</value>
@@ -103,8 +95,6 @@
     </bean>
     <bean id="feedController" class="org.springframework.extensions.surf.mvc.FeedController">
         <property name="cacheSeconds" value="-1" />
-        <property name="useExpiresHeader"><value>true</value></property>
-        <property name="useCacheControlHeader"><value>true</value></property>
         <property name="connectorService" ref="connector.service" />
     </bean>
     
