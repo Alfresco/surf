@@ -61,7 +61,7 @@
       <dependency.freemarker.version>2.3.30-jakarta-1</dependency.freemarker.version>
       <dependency.rhino.version>1.7.13</dependency.rhino.version>
       <dependency.yui.version>2.9.0-alfresco-20141223</dependency.yui.version>
-      <dependency.httpcomponents.version>4.5.12</dependency.httpcomponents.version>
+      <dependency.httpcomponents.version>4.5.13</dependency.httpcomponents.version>
       <dependency.opencmis.version>0.11.0</dependency.opencmis.version>
       <plugin.jetty.version>8.1.16.v20140903</plugin.jetty.version>
       <java.version>17</java.version>
@@ -172,7 +172,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
+            <version>2.14.0</version>
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
@@ -187,7 +187,7 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.10</version>
+            <version>1.13</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
