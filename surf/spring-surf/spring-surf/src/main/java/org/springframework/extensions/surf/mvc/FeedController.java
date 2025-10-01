@@ -153,8 +153,8 @@ public class FeedController extends UrlViewController
     }
     
     private void authorizedResponseStatus(HttpServletResponse res) throws IOException {
+        res.setHeader("WWW-Authenticate", "Basic realm=\"Alfresco\"");
         res.sendError(HttpServletResponse.SC_UNAUTHORIZED,
                 "Requested endpoint requires authentication.");
-        res.setHeader("WWW-Authenticate", "Basic realm=\"Alfresco\"");
     }
 }
