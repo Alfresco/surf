@@ -55,16 +55,16 @@
 
    <properties>
       <!-- Surf projects historically use 'spring.version' property -->
-      <spring.version>6.2.0</spring.version>
+      <spring.version>7.0.2</spring.version>
       <dependency.alfresco-core.version>8.425</dependency.alfresco-core.version>
-      <dependency.webscripts.version>10.0</dependency.webscripts.version>
+      <dependency.webscripts.version>10.3</dependency.webscripts.version>
       <dependency.freemarker.version>2.3.30-jakarta-1</dependency.freemarker.version>
       <dependency.rhino.version>1.7.13</dependency.rhino.version>
       <dependency.yui.version>2.9.0-alfresco-20141223</dependency.yui.version>
       <dependency.httpcomponents.version>4.5.12</dependency.httpcomponents.version>
       <dependency.opencmis.version>0.11.0</dependency.opencmis.version>
       <plugin.jetty.version>8.1.16.v20140903</plugin.jetty.version>
-      <java.version>17</java.version>
+      <java.version>21</java.version>
       <maven.build.sourceVersion>${java.version}</maven.build.sourceVersion>
       <maven.compiler.source>${java.version}</maven.compiler.source>
       <maven.compiler.target>${java.version}</maven.compiler.target>
