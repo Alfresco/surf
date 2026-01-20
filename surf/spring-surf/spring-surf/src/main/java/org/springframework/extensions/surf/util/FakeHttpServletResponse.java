@@ -138,6 +138,17 @@ public class FakeHttpServletResponse extends HttpServletResponseWrapper
         this.characterEncoding = characterEncoding;
     }
 
+    /**
+     * (non-Javadoc)
+     * Intentionally returns {@code null} to avoid exposing the wrapped response.
+     * @see jakarta.servlet.ServletResponseWrapper#getResponse()
+     */
+    @Override
+    public HttpServletResponse getResponse() {
+        return null;
+    }
+
+
     /*
      * (non-Javadoc)
      * @see javax.servlet.ServletResponse#getCharacterEncoding()
