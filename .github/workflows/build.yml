@@ -46,7 +46,7 @@ jobs:
           server-password: MAVEN_PASSWORD
 
       - name: "Cache the Maven packages to speed up build"
-        uses: actions/cache@v1
+        uses: actions/cache@v5.0.5
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -84,7 +84,7 @@ jobs:
           cp -v surf/_ci/settings.xml ${HOME}/.m2/ || cp -v surf/_ci/.travis.settings.xml ${HOME}/.m2/settings.xml
 
       - name: "Cache the Maven packages to speed up build"
-        uses: actions/cache@v1
+        uses: actions/cache@v5.0.5
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
