@@ -417,6 +417,7 @@ public class DependencyAggregator implements ApplicationContextAware, CacheRepor
                             {
                                 logger.warn("Rejected inline dependency content from an untrusted aggregation request");
                             }
+cacheByFileSet = false;
                             continue;
                         }
                         aggregatedFileContents.append("\n/*Path=Inline insert...*/\n\n");
