@@ -71,8 +71,11 @@ public class DependencyAggregator implements ApplicationContextAware, CacheRepor
     public static final String CLIENT_DEBUG = "client-debug";
     public static final String CLIENT_COLLATION_DEBUG = "client-collation-debug";
     
-    // This marker would be illegal in a path. When detected in a path it indicates that the "path"
-    // is in fact inline JavaScript or CSS to insert into the aggregated results..
+    /**
+     * Prefix for dependency entries that are inline script or stylesheet text rather than a resource path.
+     * Used when Surf renders pages (for example FreeMarker directives) to splice generated content into
+     * an aggregated bundle. See {@link #generateJavaScriptDependencies(LinkedHashSet, boolean)}.
+     */
     public static final String INLINE_AGGREGATION_MARKER = ">>>";
     
     /** Set the size of the file cache for MD5 checksums */
@@ -272,43 +275,117 @@ public class DependencyAggregator implements ApplicationContextAware, CacheRepor
     }
     
     /**
-     * <p>Generates a single compressed JavaScript resource from the supplied list of paths and
-     * returns an MD5 checksum value that should be passed to the browser to when requesting
-     * the dependencies from the server. The combined compressed source is cached using the MD5
-     * checksum as a key.</p>
-     *  
-     * @param paths A list of paths to compress and combine into a single resource.
-     * @return An MD5 checksum that can be used as a key to retrieve the resource from the cache.
+     * Generates a single compressed JavaScript resource for the supplied dependency list and returns
+     * an MD5 checksum key for {@code /res/&lt;checksum&gt;.js}.
+     * <p>
+     * Equivalent to {@link #generateJavaScriptDependencies(LinkedHashSet, boolean)
+     * generateJavaScriptDependencies(paths, true)}. Callers such as
+     * {@link org.springframework.extensions.directives.OutputJavaScriptContentModelElement},
+     * {@link org.springframework.extensions.webscripts.ScriptResourceUtils}, and Dojo aggregation
+     * build their path sets during trusted server-side page rendering and may include entries prefixed
+     * with {@link #INLINE_AGGREGATION_MARKER}; inline content must remain enabled (true) for those flows.
+     * </p>
+     *
+     * @param paths Resource paths and/or {@link #INLINE_AGGREGATION_MARKER}-prefixed inline fragments
+     * @return MD5 checksum plus {@code .js} extension for the cached bundle
      */
     public String generateJavaScriptDependencies(LinkedHashSet<String> paths)
     {
-        return generateDependencies(paths, CompressionType.JAVASCRIPT);
+        return generateJavaScriptDependencies(paths, true);
+    }
+
+    /**
+     * Generates a single compressed JavaScript resource with explicit control over inline content.
+     * <p>
+     * Each entry in {@code paths} is either a webapp resource path or a string beginning with
+     * {@link #INLINE_AGGREGATION_MARKER}, in which case the remainder is copied verbatim into the
+     * aggregate (then subject to normal CSS/JS processing for the bundle type).
+     * </p>
+     * <p>
+     * Set {@code allowInlineContent} to {@code true} when paths are produced by Surf during page
+     * composition (FreeMarker directives, Dojo dependency handlers, and similar). Set it to
+     * {@code false} for HTTP-driven aggregation where query parameters must not supply inline
+     * LESS/CSS or script (for example {@link org.springframework.extensions.surf.webscripts.XhrDependencies});
+     * entries with the inline marker are skipped and a warning is logged.
+     * </p>
+     *
+     * @param paths Resource paths and optional inline fragments
+     * @param allowInlineContent {@code true} to honour {@link #INLINE_AGGREGATION_MARKER} entries;
+     *        {@code false} to ignore them (untrusted request paths)
+     * @return MD5 checksum plus {@code .js} extension for the cached bundle
+     */
+    public String generateJavaScriptDependencies(LinkedHashSet<String> paths, boolean allowInlineContent)
+    {
+        return generateDependencies(paths, CompressionType.JAVASCRIPT, allowInlineContent);
     }
     
     /**
-     * <p>Generates a single compressed CSS resource from the supplied list of paths and
-     * returns an MD5 checksum value that should be passed to the browser to when requesting
-     * the dependencies from the server. The combined compressed source is cached using the MD5
-     * checksum as a key.</p>
-     *  
-     * @param paths A list of paths to compress and combine into a single resource.
-     * @return An MD5 checksum that can be used as a key to retrieve the resource from the cache.
+     * Generates a single CSS resource for the supplied dependency list and returns an MD5 checksum
+     * key for {@code /res/&lt;checksum&gt;.css}. The combined source is passed through LESS theme
+     * processing before caching.
+     * <p>
+     * Equivalent to {@link #generateCSSDependencies(LinkedHashSet, boolean)
+     * generateCSSDependencies(paths, true)}. Callers such as
+     * {@link org.springframework.extensions.directives.OutputCSSContentModelElement} and
+     * {@link org.springframework.extensions.surf.webscripts.XHRDojoDependencies} build their path
+     * sets during trusted server-side page rendering and may include entries prefixed with
+     * {@link #INLINE_AGGREGATION_MARKER}; inline content must remain enabled (true) for those flows.
+     * </p>
+     *
+     * @param paths Resource paths and/or {@link #INLINE_AGGREGATION_MARKER}-prefixed inline fragments
+     * @return MD5 checksum plus {@code .css} extension for the cached bundle
      */
     public String generateCSSDependencies(LinkedHashSet<String> paths)
     {
-        return generateDependencies(paths, CompressionType.CSS);
+        return generateCSSDependencies(paths, true);
+    }
+
+    /**
+     * Generates a single CSS resource with explicit control over inline content. The combined source
+     * is passed through LESS theme processing before caching.
+     * <p>
+     * Each entry in {@code paths} is either a webapp resource path or a string beginning with
+     * {@link #INLINE_AGGREGATION_MARKER}, in which case the remainder is copied verbatim into the
+     * aggregate (then compiled with the configured {@link CssThemeHandler}, including LESS where
+     * applicable).
+     * </p>
+     * <p>
+     * Set {@code allowInlineContent} to {@code true} when paths are produced by Surf during page
+     * composition (FreeMarker directives, Dojo dependency handlers, and similar). Set it to
+     * {@code false} for HTTP-driven aggregation where query parameters must not supply inline
+     * LESS/CSS (for example {@link org.springframework.extensions.surf.webscripts.XhrDependencies});
+     * entries with the inline marker are skipped and a warning is logged.
+     * </p>
+     *
+     * @param paths Resource paths and optional inline fragments
+     * @param allowInlineContent {@code true} to honour {@link #INLINE_AGGREGATION_MARKER} entries;
+     *        {@code false} to ignore them (untrusted request paths)
+     * @return MD5 checksum plus {@code .css} extension for the cached bundle
+     */
+    public String generateCSSDependencies(LinkedHashSet<String> paths, boolean allowInlineContent)
+    {
+        return generateDependencies(paths, CompressionType.CSS, allowInlineContent);
     }
     
     /**
-     * <p>Retrieves, compresses and combines the requested dependencies into a single
-     * resource using the supplied compression type and returns an MD5 checksum that can
-     * be used to retrieve the resource from the cache.</p>
-     * 
-     * @param paths A list of the paths to retrieve, compress and combine.
-     * @param compressionType CompressionType
-     * @return String
+     * Core implementation shared by JavaScript and CSS aggregation.
+     * <p>
+     * Walks {@code paths} in order (a {@link LinkedHashSet} so duplicates are dropped but sequence is
+     * kept). For each entry: either splices in inline text after {@link #INLINE_AGGREGATION_MARKER}
+     * when {@code allowInlineContent} is true, or loads file content from the webapp (with CSS import
+     * and image URL fixes where needed). JavaScript files may be minified unless debug mode is on; CSS
+     * is left uncompressed here so LESS can run later. CSS bundles are then theme/LESS-processed; the
+     * full text is stored in memory and addressed by an MD5 checksum filename (for example
+     * {@code abc123.js}). If this exact set of paths was bundled before, the existing checksum is reused.
+     * </p>
+     *
+     * @param paths ordered dependency paths and optional inline fragments
+     * @param compressionType whether to build a {@code .js} or {@code .css} bundle
+     * @param allowInlineContent if false, skip {@link #INLINE_AGGREGATION_MARKER} entries (untrusted requests)
+     * @return checksum plus {@code .js} or {@code .css} suffix for {@code /res/} URLs
      */
-    private String generateDependencies(final LinkedHashSet<String> paths, final CompressionType compressionType)
+    private String generateDependencies(final LinkedHashSet<String> paths, final CompressionType compressionType,
+            final boolean allowInlineContent)
     {
         String checksum = getCachedChecksumForFileSet(paths);
         if (checksum != null)
@@ -332,6 +409,17 @@ public class DependencyAggregator implements ApplicationContextAware, CacheRepor
                     String fileContents = null;
                     if (path.startsWith(INLINE_AGGREGATION_MARKER))
                     {
+                        // Inline entries are only safe from server-rendered pages; reject them when paths
+                        // come from HTTP parameters so attackers cannot inject LESS/CSS for server compilation.
+                        if (!allowInlineContent)
+                        {
+                            if (logger.isWarnEnabled())
+                            {
+                                logger.warn("Rejected inline dependency content from an untrusted aggregation request");
+                            }
+cacheByFileSet = false;
+                            continue;
+                        }
                         aggregatedFileContents.append("\n/*Path=Inline insert...*/\n\n");
                         fileContents = path.substring(INLINE_AGGREGATION_MARKER.length());
                         aggregatedFileContents.append(fileContents);

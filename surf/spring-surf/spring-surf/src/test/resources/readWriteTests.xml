@@ -9,6 +9,7 @@
       <packages>
           <package name="org.springframework.extensions.surf.test"></package>
           <package name="org.springframework.extensions.surf.test.api"></package>
+          <package name="org.springframework.extensions.surf.test.webscripts"></package>
       </packages>
   </test>
 </suite>
