@@ -3,4 +3,5 @@
   <url>/surf/dojo/xhr/dependencies</url>
   <family>Dojo</family>
   <format default="json">extension</format>
+  <authentication>user</authentication>
 </webscript>

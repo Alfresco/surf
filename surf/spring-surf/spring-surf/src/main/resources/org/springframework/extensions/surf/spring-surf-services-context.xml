@@ -585,6 +585,7 @@
    <!-- This bean builds aggregated CSS and JavaScript resources for the requested dependencies -->
    <bean id="webscript.resources.xhr-dependencies.get" class="org.springframework.extensions.surf.webscripts.XhrDependencies" parent="webscript" scope="prototype">
       <property name="dependencyAggregator"  ref="dependency.aggregator" />
+      <property name="webFrameworkConfigElement" ref="webframework.config.element"/>
    </bean>
    
    <!--  This bean builds aggregated resources from an AMD request -->

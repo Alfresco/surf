@@ -66,6 +66,12 @@ public class XHRDojoDependencies extends DeclarativeWebScript
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache)
     {
         Map<String, Object> model = new HashMap<String, Object>(7, 1.0f);
+        // Same policy as XhrDependencies: only active when Share aggregation is enabled (see surf.xml).
+        if (this.webFrameworkConfig == null || !this.webFrameworkConfig.isAggregateDependenciesEnabled())
+        {
+            forbid(status, "Dependency aggregation is not enabled");
+            return model;
+        }
         if (this.dojoDependencyHandler != null)
         {
             try
@@ -82,6 +88,12 @@ public class XHRDojoDependencies extends DeclarativeWebScript
                     Map<String, DojoDependencies> dependenciesForCurrentRequest = new LinkedHashMap<String, DojoDependencies>();
                     this.processServices(json, dependenciesForCurrentRequest);
                     this.processWidgets(json, dependenciesForCurrentRequest);
+
+                    if (containsInlineAggregationMarker(dependenciesForCurrentRequest))
+                    {
+                        forbid(status, "Inline dependency content is not permitted via this endpoint");
+                        return model;
+                    }
                     
                     // Extract the CSS dependencies and build a map of the media type (e.g. "screen") to the aggregated resource...
                     Map<String, String> mediaToResource = this.generateCssMediaToResourceMap(dependenciesForCurrentRequest);
@@ -229,7 +241,7 @@ public class XHRDojoDependencies extends DeclarativeWebScript
             for (Entry<String, LinkedHashSet<String>> mediaToCssResource : group.entrySet())
             {
                 // Append the specific CSS dependencies as an aggregated resource
-                String checksum = dependencyAggregator.generateCSSDependencies(mediaToCssResource.getValue());
+                String checksum = dependencyAggregator.generateCSSDependencies(mediaToCssResource.getValue(), false);
                 mediaToResource.put(mediaToCssResource.getKey(), this.dependencyHandler.getResourceControllerMapping() + CssImageDataHandler.FORWARD_SLASH + checksum);
             }
         }
@@ -284,5 +296,46 @@ public class XHRDojoDependencies extends DeclarativeWebScript
     public void setWebFrameworkConfig(WebFrameworkConfigElement webFrameworkConfig)
     {
         this.webFrameworkConfig = webFrameworkConfig;
+    }
+
+    private void forbid(Status status, String message)
+    {
+        status.setCode(HttpServletResponse.SC_FORBIDDEN);
+        status.setMessage(message);
+        status.setRedirect(true);
+    }
+
+    /**
+     * Returns true if any resolved CSS or non-AMD dependency path uses the inline {@code >>>} marker.
+     */
+    private boolean containsInlineAggregationMarker(Map<String, DojoDependencies> dependenciesForCurrentRequest)
+    {
+        if (dependenciesForCurrentRequest == null)
+        {
+            return false;
+        }
+        for (DojoDependencies deps : dependenciesForCurrentRequest.values())
+        {
+            if (deps == null)
+            {
+                continue;
+            }
+            for (DojoDependencies.CssDependency cssDep : deps.getCssDeps())
+            {
+                String path = cssDep.getPath();
+                if (path != null && path.startsWith(DependencyAggregator.INLINE_AGGREGATION_MARKER))
+                {
+                    return true;
+                }
+            }
+            for (String nonAmd : deps.getNonAmdDependencies())
+            {
+                if (nonAmd != null && nonAmd.startsWith(DependencyAggregator.INLINE_AGGREGATION_MARKER))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
