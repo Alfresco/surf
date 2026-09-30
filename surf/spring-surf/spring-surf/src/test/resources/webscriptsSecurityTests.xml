@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Surf XHR dependency security tests" verbose="1">
+  <test name="WebScriptsSecurity">
+    <packages>
+      <package name="org.springframework.extensions.surf.test.webscripts"/>
+    </packages>
+  </test>
+</suite>
