@@ -38,8 +38,8 @@ import org.springframework.extensions.webscripts.ScriptConfigModel;
 import org.springframework.extensions.webscripts.TemplateConfigModel;
 import org.springframework.web.context.ServletContextAware;
 
-import freemarker.ext.jsp.TaglibFactory;
-import freemarker.ext.servlet.ServletContextHashModel;
+import freemarker.ext.jakarta.jsp.TaglibFactory;
+import freemarker.ext.jakarta.servlet.ServletContextHashModel;
 import freemarker.template.ObjectWrapper;
 
 /**

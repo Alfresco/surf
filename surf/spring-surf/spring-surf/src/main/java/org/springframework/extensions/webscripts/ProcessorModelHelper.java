@@ -69,12 +69,12 @@ import org.springframework.extensions.surf.types.SurfBug;
 import org.springframework.extensions.surf.types.TemplateInstance;
 import org.springframework.extensions.surf.util.I18NUtil;
 
-import freemarker.ext.jsp.TaglibFactory;
-import freemarker.ext.servlet.FreemarkerServlet;
-import freemarker.ext.servlet.HttpRequestHashModel;
-import freemarker.ext.servlet.HttpRequestParametersHashModel;
-import freemarker.ext.servlet.HttpSessionHashModel;
-import freemarker.ext.servlet.ServletContextHashModel;
+import freemarker.ext.jakarta.jsp.TaglibFactory;
+import freemarker.ext.jakarta.servlet.FreemarkerServlet;
+import freemarker.ext.jakarta.servlet.HttpRequestHashModel;
+import freemarker.ext.jakarta.servlet.HttpRequestParametersHashModel;
+import freemarker.ext.jakarta.servlet.HttpSessionHashModel;
+import freemarker.ext.jakarta.servlet.ServletContextHashModel;
 import freemarker.template.ObjectWrapper;
 
 /**
