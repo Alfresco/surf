@@ -29,8 +29,8 @@ import org.springframework.extensions.webscripts.Container;
 import org.springframework.extensions.webscripts.ScriptRemote;
 import org.springframework.extensions.webscripts.connector.ConnectorService;
 
-import freemarker.ext.jsp.TaglibFactory;
-import freemarker.ext.servlet.ServletContextHashModel;
+import freemarker.ext.jakarta.jsp.TaglibFactory;
+import freemarker.ext.jakarta.servlet.ServletContextHashModel;
 
 /**
  * Service Registry for Web Framework
